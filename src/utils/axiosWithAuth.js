@@ -1,30 +1,43 @@
 import axios from "axios";
-import getBaseUrl from "../api/config";
 
 const axiosWithAuth = () => {
   const token = localStorage.getItem("token");
   const licenseKey = localStorage.getItem("license_key");
-  const baseURL = getBaseUrl(); // ✅ SINGLE SOURCE
-
-  if (!baseURL) {
-    console.error("❌ API base URL could not be resolved");
-  }
 
   const instance = axios.create({
-    baseURL,
+    baseURL:
+      process.env.REACT_APP_API_BASE_URL ||
+      "https://shopman-backend-production.up.railway.app", // 🔥 production fallback
+
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
       ...(licenseKey ? { "X-License-Key": licenseKey } : {}),
     },
   });
 
-  // ✅ Only set JSON header if NOT FormData
   instance.interceptors.request.use((config) => {
     if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
+    } else {
+      delete config.headers["Content-Type"];
     }
     return config;
   });
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (!error.response) {
+        return Promise.reject({
+          message: "Network or backend not reachable (production)",
+        });
+      }
+
+      return Promise.reject(
+        error.response.data || { message: "API request failed" }
+      );
+    }
+  );
 
   return instance;
 };
