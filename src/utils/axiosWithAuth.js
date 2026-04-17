@@ -7,7 +7,7 @@ const axiosWithAuth = () => {
   const instance = axios.create({
     baseURL:
       process.env.REACT_APP_API_BASE_URL ||
-      "https://shopman-backend-production.up.railway.app", // 🔥 production fallback
+      "https://hems-backend-nkfz.onrender.com", // 🔥 production fallback
 
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
