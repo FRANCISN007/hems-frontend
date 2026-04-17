@@ -1,19 +1,11 @@
 const getBaseUrl = () => {
-  // 1. Use environment variable FIRST (production-safe)
-  const envUrl =
-    process.env.REACT_APP_API_BASE_URL?.trim();
-
-  if (envUrl) {
-    return envUrl;
+  // Use the correct environment variable
+  if (process.env.REACT_APP_API_BASE_URL) {
+    return process.env.REACT_APP_API_BASE_URL;
   }
 
-  // 2. Local development fallback ONLY
-  if (typeof window !== "undefined") {
-    return "http://localhost:8000";
-  }
-
-  // 3. Ultimate fallback (safe default)
-  return "http://localhost:8000";
+  // Local development fallback
+  return "http://127.0.0.1:8000";
 };
 
 export default getBaseUrl;
