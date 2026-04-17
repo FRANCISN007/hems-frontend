@@ -7,8 +7,11 @@ import axios from "axios";
  * 1. Railway env variable
  * 2. Local fallback
  */
-const BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+if (!BASE_URL) {
+  throw new Error("❌ REACT_APP_API_BASE_URL is not set");
+}
 
 
 console.log("🧪 Login API Base URL:", BASE_URL);
