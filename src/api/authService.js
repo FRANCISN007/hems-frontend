@@ -2,32 +2,25 @@
 import axios from "axios";
 import getBaseUrl from "./config";
 
-let BASE_URL = getBaseUrl();
+// ✅ Stable BASE URL (NO runtime switching, NO localhost fallback)
+const BASE_URL =
+  getBaseUrl() ||
+  process.env.REACT_APP_API_BASE_URL ||
+  "https://hems-backend-nkfz.onrender.com";
 
-const testBackend = async (url) => {
-  try {
-    const response = await fetch(`${url}/health`, { method: "GET", cache: "no-store" });
-    return response.ok;
-  } catch {
-    return false;
-  }
-};
+console.log("✅ API BASE:", BASE_URL);
 
-(async () => {
-  const reachable = await testBackend(BASE_URL);
-  if (!reachable && !BASE_URL.includes("localhost")) {
-    console.warn(`⚠️ Backend not reachable at ${BASE_URL}, switching to localhost.`);
-    BASE_URL = `${window.location.protocol}//localhost:8000`;
-  }
-  console.log("✅ Using API Base URL:", BASE_URL);
-})();
-
+// ✅ Axios instance
 const authClient = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// ✅ Login user
+// ==========================
+// ✅ LOGIN USER
+// ==========================
 export const loginUser = async (username, password) => {
   try {
     const formData = new URLSearchParams();
@@ -35,21 +28,38 @@ export const loginUser = async (username, password) => {
     formData.append("password", password);
 
     const response = await authClient.post("/users/token", formData, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     const user = response.data;
+
+    // ✅ Save auth data
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", user.access_token);
+
     return user;
   } catch (error) {
     console.error("❌ Login failed:", error);
-    throw error.response?.data || { message: "Login failed" };
+
+    throw (
+      error.response?.data || {
+        message: "Login failed. Please check your credentials.",
+      }
+    );
   }
 };
 
-// ✅ Register user
-export const registerUser = async ({ username, password, roles, admin_password }) => {
+// ==========================
+// ✅ REGISTER USER
+// ==========================
+export const registerUser = async ({
+  username,
+  password,
+  roles,
+  admin_password,
+}) => {
   try {
     const response = await authClient.post("/users/register/", {
       username,
@@ -57,18 +67,35 @@ export const registerUser = async ({ username, password, roles, admin_password }
       roles,
       admin_password,
     });
+
     return response.data;
   } catch (error) {
     console.error("❌ Registration failed:", error);
-    throw error.response?.data || { message: "Registration failed" };
+
+    throw (
+      error.response?.data || {
+        message: "Registration failed",
+      }
+    );
   }
 };
 
+// ==========================
+// ✅ GET CURRENT USER
+// ==========================
 export const getCurrentUser = () => {
-  const userStr = localStorage.getItem("user");
-  return userStr ? JSON.parse(userStr) : null;
+  try {
+    const userStr = localStorage.getItem("user");
+    return userStr ? JSON.parse(userStr) : null;
+  } catch (err) {
+    console.error("❌ Error reading user:", err);
+    return null;
+  }
 };
 
+// ==========================
+// ✅ LOGOUT USER
+// ==========================
 export const logoutUser = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
