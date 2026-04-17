@@ -1,13 +1,20 @@
 import axios from "axios";
 
-// ✅ Use the API base URL from config.json (set globally in index.js)
-const API_BASE_URL = window.apiBaseUrl || `http://${window.location.hostname}:8000`;
-
 const API = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.REACT_APP_API_BASE_URL,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+  },
+});
+
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
+  return config;
 });
 
 export default API;
