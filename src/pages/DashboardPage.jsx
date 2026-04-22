@@ -4,7 +4,8 @@ import { createPortal } from "react-dom";
 import axios from "axios";
 //import HotelPhoto3 from "../assets/images/HotelPhoto3.png";
 import "./DashboardPage.css";
-import { FaHotel } from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
+
 import getBaseUrl from "../api/config";
 import axiosWithAuth from "../utils/axiosWithAuth";
 
