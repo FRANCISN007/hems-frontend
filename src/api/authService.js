@@ -6,7 +6,7 @@ import getBaseUrl from "./config";
 const BASE_URL =
   getBaseUrl() ||
   process.env.REACT_APP_API_BASE_URL ||
-  "https://hems-backend-nkfz.onrender.com";
+  "https://hems-backend-production.up.railway.app";
 
 console.log("✅ API BASE:", BASE_URL);
 
