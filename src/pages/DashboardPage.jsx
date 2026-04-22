@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { createPortal } from "react-dom";
 import axios from "axios";
-import HotelPhoto3 from "../assets/images/HotelPhoto3.png";
+//import HotelPhoto3 from "../assets/images/HotelPhoto3.png";
 import "./DashboardPage.css";
 import { FaHotel } from "react-icons/fa";
 import getBaseUrl from "../api/config";
@@ -11,7 +11,7 @@ import axiosWithAuth from "../utils/axiosWithAuth";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
-import { FaFileExcel, FaPrint } from "react-icons/fa";
+//import { FaFileExcel, FaPrint } from "react-icons/fa";
 
 const API_BASE_URL = getBaseUrl();
 
@@ -20,7 +20,7 @@ const DashboardPage = () => {
   const businessName = storedUser.business?.name || "HEMS Hotel";
 
   const navigate = useNavigate();
-  const location = useLocation();
+  //const location = useLocation();
 
   // 🔥 PORTAL SUBMENU STATE (Same as Restaurant Dashboard)
   const [submenu, setSubmenu] = useState({
@@ -241,7 +241,7 @@ const DashboardPage = () => {
 
   const userRole = "admin";
 
-  const [hasReservationAlert, setHasReservationAlert] = useState(false);
+  //const [hasReservationAlert, setHasReservationAlert] = useState(false);
   const [reservationCount, setReservationCount] = useState(0);
   const [licenseInfo, setLicenseInfo] = useState(null);
 
