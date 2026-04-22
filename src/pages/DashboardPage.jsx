@@ -505,7 +505,7 @@ const DashboardPage = () => {
 
           <div style={{ display: "flex", gap: "10px" }}>
             <button onClick={exportToExcel} className="action-button">
-              <FaFileExcel style={{ marginRight: "5px" }} />
+              
               Export to Excel
             </button>
             <button onClick={printContent} className="action-button">
