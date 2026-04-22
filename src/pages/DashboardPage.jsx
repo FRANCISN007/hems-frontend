@@ -12,7 +12,7 @@ import axiosWithAuth from "../utils/axiosWithAuth";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
-import { FaFileExcel, FaPrint } from "react-icons/fa";
+
 
 const API_BASE_URL = getBaseUrl();
 
@@ -506,11 +506,11 @@ const DashboardPage = () => {
 
           <div style={{ display: "flex", gap: "10px" }}>
             <button onClick={exportToExcel} className="action-button">
-              <FaFileExcel style={{ marginRight: "5px" }} />
+              <FaIcons.FaFileExcel style={{ marginRight: "5px" }} />
               Export to Excel
             </button>
             <button onClick={printContent} className="action-button">
-              <FaPrint style={{ marginRight: "5px" }} />
+              <FaIcons.FaPrint style={{ marginRight: "5px" }} />
               Print
             </button>
           </div>
