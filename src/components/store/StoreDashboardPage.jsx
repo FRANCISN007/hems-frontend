@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, Outlet } from "react-router-dom";
-import * as FaIcons from "react-icons/fa";
+//import * as FaIcons from "react-icons/fa";
+import { FaFileExcel, FaPrint } from "react-icons/fa";
+
 
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
@@ -193,11 +195,11 @@ const StoreDashboardPage = () => {
 
           <div style={{ display: "flex", gap: "10px" }}>
             <button onClick={exportToExcel} className="action-button1">
-              <FaIcons.FaFileExcel /> Export
+              <FaFileExcel /> Export
             </button>
 
             <button onClick={printContent} className="action-button1">
-              <FaIcons.FaPrint /> Print
+              <FaPrint /> Print
             </button>
 
             <button
