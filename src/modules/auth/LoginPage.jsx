@@ -178,8 +178,8 @@ const LoginPage = () => {
       </div>
 
       <footer className="homes-footer">
-        <div>Produced & Licensed by School of Accounting Package</div>
-        <div>© 2026</div>
+        <div>Produced & Licensed by School of Accounting Package © 2026</div>
+      
       </footer>
 
       {/* INQUIRY MODAL */}
