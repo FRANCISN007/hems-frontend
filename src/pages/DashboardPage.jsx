@@ -21,7 +21,15 @@ const DashboardPage = () => {
   const businessName = storedUser.business?.name || "HEMS Hotel";
 
   const navigate = useNavigate();
-  //const location = useLocation();
+
+  // ✅ 🔐 AUTH GUARD (ADD THIS HERE)
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   // 🔥 PORTAL SUBMENU STATE (Same as Restaurant Dashboard)
   const [submenu, setSubmenu] = useState({
