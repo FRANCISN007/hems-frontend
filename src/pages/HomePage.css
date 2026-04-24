@@ -127,6 +127,12 @@ html, body {
   max-width: 620px;
   z-index: 3;
   padding: 0 20px;
+
+  /* 🔥 NEW */
+  position: absolute;
+  top: 25%;   /* adjust higher/lower (20%–30%) */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* ================= HEMS TEXT (Animated Letters) ================= */
@@ -183,8 +189,9 @@ html, body {
 
 /* ================= PROCEED BUTTON ================= */
 .proceed-button {
-  padding: 15px 38px;
-  font-size: 18px;
+
+  padding: 13px 35px;
+  font-size: 17px;
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #22d3ee, #06b6d4);
@@ -193,7 +200,7 @@ html, body {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 8px 25px rgba(34, 211, 238, 0.4);
-  z-index: 1000;
+  z-index: 10000;
 }
 
 .proceed-button:hover {
@@ -233,17 +240,7 @@ html, body {
     font-size: 1.05rem;
   }
 
-  .proceed-button {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 85%;
-    max-width: 320px;
-    padding: 14px 24px;
-    font-size: 16.5px;
-    border-radius: 50px;
-  }
+  
 
   .home-footer {
     position: relative;
@@ -268,3 +265,19 @@ html, body {
     transform: translateY(0);
   }
 }
+
+
+.top-left-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 60px; /* adjust size */
+  height: auto;
+  z-index: 1000;
+}
+
+/* Ensure parent allows absolute positioning */
+.home-container {
+  position: relative;
+}
+

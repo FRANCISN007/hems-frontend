@@ -30,18 +30,6 @@ const HomePage = () => {
     );
   };
 
-  /* ================= FLOATING HEMS LOGO (Crystal-like) ================= */
-  const HemsLogo = () => {
-    return (
-      <div className="hems-logo-wrapper">
-        <div className="hems-logo">
-          HEMS
-        </div>
-        <div className="hems-logo-glow"></div>
-      </div>
-    );
-  };
-
   return (
     <>
       {/* Fonts */}
@@ -55,27 +43,33 @@ const HomePage = () => {
       />
 
       <div className="home-container">
-        {/* Background Animation */}
-        <ShootingStars />
+        {/* 🔥 Top Left Logo + HEMS */}
+        <div className="top-left-brand">
+          <img
+            src="/images/hems-logo.jpeg"
+            alt="HEMS Logo"
+            className="top-left-logo"
+          />
 
-        {/* Floating HEMS Logo */}
-        <HemsLogo />
-
-      
-
-        {/* Main Content */}
-        <div className="home-card">
+          {/* ✅ moved HEMS here */}
           <div className="hems-text">
             <span className="hems-letter">H</span>
             <span className="hems-letter">E</span>
             <span className="hems-letter">M</span>
             <span className="hems-letter">S</span>
           </div>
+        </div>
 
+        {/* Background Animation */}
+        <ShootingStars />
+
+        {/* Main Content */}
+        <div className="home-card">
           <div className="welcome-text">
             <h1>Welcome to HEMS</h1>
             <p>
-              Professional Hotel &amp; Event Management System<br />
+              Professional Hotel &amp; Event Management System
+              <br />
               Streamline operations, bookings, events &amp; guest experience
             </p>
           </div>
@@ -91,8 +85,9 @@ const HomePage = () => {
 
         {/* Footer */}
         <footer className="home-footer">
-          <div>Produced &amp; Licensed by School of Accounting Package © 2026</div>
-          
+          <div>
+            Produced &amp; Licensed by School of Accounting Package © 2026
+          </div>
         </footer>
       </div>
     </>
