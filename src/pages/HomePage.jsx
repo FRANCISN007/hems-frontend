@@ -43,22 +43,24 @@ const HomePage = () => {
       />
 
       <div className="home-container">
-        {/* 🔥 Top Left Logo + HEMS */}
+        {/* TOP LEFT LOGO */}
         <div className="top-left-brand">
-          <img
-            src="/images/hems-logo.jpeg"
-            alt="HEMS Logo"
-            className="top-left-logo"
-          />
-
-          {/* ✅ moved HEMS here */}
-          <div className="hems-text">
-            <span className="hems-letter">H</span>
-            <span className="hems-letter">E</span>
-            <span className="hems-letter">M</span>
-            <span className="hems-letter">S</span>
+          <div className="logo-orbit-wrapper">
+            <img src="/images/hems-logo.jpeg" className="top-left-logo" />
+            <span className="orbit-ring"></span>
+            <span className="orbit-dot"></span>
           </div>
         </div>
+
+        {/* ✅ MOVE THIS OUT */}
+        <div className="hems-text">
+          <span className="hems-letter">H</span>
+          <span className="hems-letter">E</span>
+          <span className="hems-letter">M</span>
+          <span className="hems-letter">S</span>
+        </div>
+
+
 
         {/* Background Animation */}
         <ShootingStars />
@@ -66,12 +68,18 @@ const HomePage = () => {
         {/* Main Content */}
         <div className="home-card">
           <div className="welcome-text">
-            <h1>Welcome to HEMS</h1>
+
+            <h1 className="main-title">Welcome to HEMS</h1>
+
+            <h2 className="main-heading">
+              Smart Hotel & Event Management Platform
+            </h2>
+
             <p>
-              Professional Hotel &amp; Event Management System
               <br />
-              Streamline operations, bookings, events &amp; guest experience
+              Streamline bookings, bar, restaurant, store, and event operations—while enhancing the guest experience.
             </p>
+
           </div>
 
           <button
@@ -82,6 +90,8 @@ const HomePage = () => {
             Proceed &gt;&gt;
           </button>
         </div>
+
+
 
         {/* Footer */}
         <footer className="home-footer">
