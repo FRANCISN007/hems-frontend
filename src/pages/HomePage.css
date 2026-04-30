@@ -1,4 +1,4 @@
-/* ================= FONTS ================= */
+/* ================= IMPORT FONTS ================= */
 @import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
@@ -20,6 +20,7 @@ html, body {
   justify-content: space-between;
   overflow: hidden;
   background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+  padding: 20px 15px;
 }
 
 /* ================= SHOOTING STARS ================= */
@@ -58,7 +59,6 @@ html, body {
   z-index: 1000;
 }
 
-/* LOGO WRAPPER */
 .logo-orbit-wrapper {
   position: relative;
   width: 65px;
@@ -68,15 +68,14 @@ html, body {
   justify-content: center;
 }
 
-/* LOGO */
 .top-left-logo {
   width: 55px;
   height: 55px;
   border-radius: 50%;
   z-index: 2;
+  object-fit: cover;
 }
 
-/* PERFECT CENTERED RING */
 .orbit-ring {
   position: absolute;
   width: 100%;
@@ -86,7 +85,6 @@ html, body {
   animation: rotateOrbit 10s linear infinite;
 }
 
-/* DOT THAT TRULY ORBITS */
 .orbit-dot {
   position: absolute;
   width: 8px;
@@ -95,12 +93,11 @@ html, body {
   border-radius: 50%;
   top: 0;
   left: 50%;
-  transform-origin: center 32px; /* KEY FIX */
+  transform-origin: center 32px;
   box-shadow: 0 0 10px #22d3ee, 0 0 20px #06b6d4;
   animation: orbitMove 4s linear infinite;
 }
 
-/* GLOW */
 .logo-orbit-wrapper::after {
   content: "";
   position: absolute;
@@ -130,20 +127,22 @@ html, body {
 /* ================= HEMS TEXT (TOP CENTER) ================= */
 .hems-text {
   position: absolute;
-  top: 20px;
+  top: 25px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 22px;
-  font-size: 3.5rem;
+  gap: 18px;
+  font-size: 3.2rem;
   font-weight: bold;
   font-family: 'Audiowide', cursive;
   z-index: 1000;
+  white-space: nowrap;
 }
 
 .hems-letter {
   animation: pulseColor 4.5s infinite ease-in-out;
   color: #67e8f9;
+  text-shadow: 0 0 15px #22d3ee;
 }
 
 .hems-letter:nth-child(1) { animation-delay: 0s; }
@@ -159,15 +158,16 @@ html, body {
 /* ================= HOME CARD ================= */
 .home-card {
   position: absolute;
-  top: 28%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   text-align: center;
   max-width: 620px;
+  width: 100%;
   z-index: 3;
   padding: 0 20px;
 }
@@ -178,21 +178,33 @@ html, body {
   animation: fadeInUp 1.8s ease;
 }
 
-.welcome-text h1 {
-  font-size: 2.1rem;
+.welcome-text h1.main-title {
+  font-size: 2.25rem;
   font-family: "Cinzel Decorative", serif;
   color: #a5f3fc;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.welcome-text h2.main-heading {
+  font-size: 1.35rem;
+  font-family: "Audiowide", sans-serif;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+  line-height: 1.3;
 }
 
 .welcome-text p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #94a3b8;
   font-family: "Audiowide", sans-serif;
+  line-height: 1.5;
 }
 
 /* ================= BUTTON ================= */
 .proceed-button {
-  padding: 13px 35px;
+  padding: 14px 40px;
   font-size: 17px;
   font-weight: bold;
   color: white;
@@ -202,6 +214,7 @@ html, body {
   cursor: pointer;
   transition: 0.3s ease;
   box-shadow: 0 8px 25px rgba(34, 211, 238, 0.4);
+  margin-top: 10px;
 }
 
 .proceed-button:hover {
@@ -217,70 +230,85 @@ html, body {
   color: #64748b;
   font-size: 0.85rem;
   font-style: italic;
+  z-index: 10;
+  text-align: right;
 }
 
-/* ================= ANIMATION ================= */
+/* ================= ANIMATIONS ================= */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= MOBILE ================= */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
 @media (max-width: 768px) {
   .hems-text {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
     gap: 12px;
+    top: 18px;
   }
 
   .home-card {
-    top: 32%;
+    top: 52%;
+    padding: 0 15px;
   }
 
-  .welcome-text h1 {
-    font-size: 1.6rem;
+  .welcome-text h1.main-title {
+    font-size: 1.85rem;
+  }
+
+  .welcome-text h2.main-heading {
+    font-size: 1.15rem;
   }
 
   .welcome-text p {
-    font-size: 1rem;
+    font-size: 0.98rem;
+  }
+
+  .proceed-button {
+    padding: 13px 35px;
+    font-size: 16px;
+  }
+
+  .top-left-brand {
+    top: 15px;
+    left: 15px;
+  }
+
+  .logo-orbit-wrapper {
+    width: 58px;
+    height: 58px;
+  }
+
+  .top-left-logo {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hems-text {
+    font-size: 2.1rem;
+    gap: 10px;
+  }
+
+  .welcome-text h1.main-title {
+    font-size: 1.65rem;
+  }
+
+  .welcome-text h2.main-heading {
+    font-size: 1.05rem;
   }
 
   .home-footer {
-    position: relative;
+    font-size: 0.78rem;
+    bottom: 12px;
+    right: 12px;
     text-align: center;
-    margin-bottom: 60px;
-  }
-}
-
-
-
-.main-title {
-  font-size: 2.3rem;
-  font-family: "Cinzel Decorative", serif;
-  color: #a5f3fc;
-  letter-spacing: 1.5px;
-  margin-bottom: 8px;
-
-  /* subtle premium animation */
-  animation: fadeSlide 1.5s ease;
-}
-
-.main-heading {
-  font-size: 1.4rem;
-  font-family: "Audiowide", sans-serif;
-  color: #cbd5e1;
-  margin-bottom: 10px;
-
-  animation: fadeSlide 2s ease;
-}
-
-/* smooth entrance instead of marquee */
-@keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
