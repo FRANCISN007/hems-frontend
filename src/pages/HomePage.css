@@ -170,7 +170,9 @@ html, body {
   width: 100%;
   z-index: 3;
   padding: 0 20px;
+  box-sizing: border-box;
 }
+
 
 /* ================= TEXT ================= */
 .welcome-text {
@@ -215,7 +217,10 @@ html, body {
   transition: 0.3s ease;
   box-shadow: 0 8px 25px rgba(34, 211, 238, 0.4);
   margin-top: 10px;
+  white-space: nowrap;           /* Prevents text wrapping */
+  min-width: 180px;              /* Ensures button doesn't collapse */
 }
+
 
 .proceed-button:hover {
   transform: translateY(-3px);
@@ -245,34 +250,33 @@ html, body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
+/* ================= RESPONSIVE FIXES ================= */
 @media (max-width: 768px) {
   .hems-text {
-    font-size: 2.4rem;
-    gap: 12px;
-    top: 18px;
+    top: 16px;        /* was 18px or 25px */
+    font-size: 2.3rem;
+    gap: 10px;
   }
 
-  .home-card {
-    top: 52%;
-    padding: 0 15px;
-  }
-
-  .welcome-text h1.main-title {
-    font-size: 1.85rem;
-  }
-
-  .welcome-text h2.main-heading {
-    font-size: 1.15rem;
-  }
-
-  .welcome-text p {
-    font-size: 0.98rem;
-  }
 
   .proceed-button {
     padding: 13px 35px;
     font-size: 16px;
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-card {
+    top: 55%;                    /* Push it further down on very small screens */
+  }
+
+  .welcome-text h1.main-title {
+    font-size: 1.65rem;
+  }
+
+  .welcome-text h2.main-heading {
+    font-size: 1.05rem;
   }
 
   .top-left-brand {
