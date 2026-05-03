@@ -26,6 +26,8 @@ const CreatePurchase = () => {
   const [message, setMessage] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
+
+
   const searchTimers = useRef({});
   const searchCache = useRef({});
 
@@ -94,8 +96,11 @@ const CreatePurchase = () => {
     row.total = qty * price;
   };
 
+  const fetchTimeout = useRef(null);
+
   const handleSearch = (index, value) => {
     const updated = [...rows];
+
     updated[index].search = value;
     updated[index].itemId = "";
     updated[index].itemName = "";
@@ -103,8 +108,8 @@ const CreatePurchase = () => {
 
     setRows(updated);
 
-    if (searchTimers.current[index]) {
-      clearTimeout(searchTimers.current[index]);
+    if (fetchTimeout.current) {
+      clearTimeout(fetchTimeout.current);
     }
 
     if (value.length < 2) {
@@ -113,16 +118,25 @@ const CreatePurchase = () => {
       return;
     }
 
-    searchTimers.current[index] = setTimeout(async () => {
-      const results = await fetchItems(value);
+    fetchTimeout.current = setTimeout(async () => {
+      try {
+        const res = await axios.get("/store/items/simple-search", {
+          params: { search: value, limit: 20 },
+        });
 
-      setRows((prev) => {
-        const next = [...prev];
-        next[index].suggestions = results;
-        return next;
-      });
+        const results = Array.isArray(res.data) ? res.data : [];
+
+        setRows((prev) => {
+          const next = [...prev];
+          next[index].suggestions = results;
+          return next;
+        });
+      } catch {
+        // silent fail
+      }
     }, 300);
   };
+
 
   const handleRowChange = (index, field, value) => {
     const updated = [...rows];
@@ -391,4 +405,5 @@ const CreatePurchase = () => {
 };
 
 export default CreatePurchase;
+
 
