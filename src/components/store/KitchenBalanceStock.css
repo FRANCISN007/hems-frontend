@@ -2,7 +2,7 @@
 .stock-balance-container2 {
   padding: 8px;
   font-family: Arial, sans-serif;
-  max-width: 1200px;  /* wider container for large screens */
+  max-width: 1250px;
   width: 100%;
   margin: 0 auto;
   background: #fafafa;
@@ -25,12 +25,12 @@
   color: #2c3e50;
 }
 
-/* ================= FILTER FRAME ================= */
+/* ================= FILTER FRAME (Now same style as Store) ================= */
 .filter-frame2 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 6px 4px;
+  padding: 6px 8px;
   background: #ffffff;
   border-radius: 6px;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.08);
@@ -38,40 +38,29 @@
   align-items: center;
 }
 
-/* Rows inside filter */
-.filter-row2 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-  flex: 1; /* allow spreading */
-}
-
-/* Each input group */
+/* Each filter group */
 .filter-group2 {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1; /* expand evenly */
+  gap: 2px;
+  flex: 1;
+  min-width: 120px;
 }
 
-/* Label */
 .filter-group2 label {
   font-size: 12px;
   font-weight: 600;
   color: #333;
 }
 
-/* Inputs & Selects */
 .filter-group2 input,
 .filter-group2 select {
-  min-width: 120px;
-  padding: 6px 10px;
+  padding: 4px 6px;
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 12px;
   background: #fafafa;
-  width: 100%; /* fill parent group */
+  width: 100%;
 }
 
 .filter-group2 input:focus,
@@ -81,19 +70,15 @@
   background: #fff;
 }
 
-/* Wider inputs for search/item row */
-.filter-row2.search-group input {
-  min-width: 150px;
-}
+/* Specific width adjustments */
+.kitchen-filter { min-width: 140px; }
+.search-filter { min-width: 150px; }
+.item-filter { min-width: 130px; }
 
-.filter-row2.search-group select {
-  min-width: 130px;
-}
-
-/* ================= TOTALS ================= */
+/* ================= TOTAL ================= */
 .total-stock2 {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   font-size: 14px;
   color: #2d572c;
   background: #e6f4ea;
@@ -103,24 +88,38 @@
   align-self: flex-start;
 }
 
-/* ================= TABLE ================= */
+/* ================= SCROLLABLE TABLE ================= */
+.table-scroll-container {
+  max-height: 65vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
 .stock-balance-container2 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 6px;
-  table-layout: auto; /* expand columns naturally */
+  table-layout: auto;
+  margin: 0;
+}
+
+.stock-balance-container2 thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #293552;
 }
 
 .stock-balance-container2 th,
 .stock-balance-container2 td {
   padding: 4px 6px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
 }
 
 .stock-balance-container2 th {
-  background-color: #293552;
   color: #fff;
   font-weight: 600;
   font-size: 13px;
@@ -128,13 +127,8 @@
   letter-spacing: 0.3px;
 }
 
-.even-row {
-  background-color: #f9f9f9;
-}
-
-.odd-row {
-  background-color: #fff;
-}
+.even-row { background-color: #f9f9f9; }
+.odd-row { background-color: #fff; }
 
 /* ================= MESSAGE ================= */
 .message {
@@ -148,39 +142,7 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
-  .stock-balance-container2 {
-    width: 98%;
-  }
-
-  .filter-frame2 {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-row2 {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .filter-group2 input,
-  .filter-group2 select {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .filter-frame2 {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-row2 {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .filter-group2 input,
-  .filter-group2 select {
-    width: 100%;
-  }
+  .stock-balance-container2 { width: 98%; }
+  .filter-frame2 { flex-direction: column; align-items: stretch; }
+  .table-scroll-container { max-height: 55vh; }
 }
