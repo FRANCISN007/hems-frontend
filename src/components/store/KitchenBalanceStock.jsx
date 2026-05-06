@@ -193,6 +193,7 @@ const KitchenBalanceStock = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
+        
         <table>
           <thead>
             <tr>
