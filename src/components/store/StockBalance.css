@@ -38,7 +38,6 @@
   align-items: center;
 }
 
-/* Each filter group */
 .filter-group3 {
   display: flex;
   flex-direction: column;
@@ -70,7 +69,6 @@
   background: #fff;
 }
 
-/* Individual filter overrides */
 .category-filter { min-width: 140px; }
 .type-filter { min-width: 120px; }
 .search-filter { min-width: 150px; }
@@ -89,12 +87,27 @@
   align-self: flex-start;
 }
 
-/* ================= TABLE ================= */
+/* ================= SCROLLABLE TABLE ================= */
+.table-scroll-container {
+  max-height: 65vh;           /* ← Change this value as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
 .stock-balance-container3 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 6px;
   table-layout: auto;
+  margin: 0;
+}
+
+.stock-balance-container3 thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #293552;
 }
 
 .stock-balance-container3 th,
@@ -106,7 +119,6 @@
 }
 
 .stock-balance-container3 th {
-  background-color: #293552;
   color: #fff;
   font-weight: 600;
   font-size: 13px;
@@ -131,6 +143,5 @@
 @media (max-width: 992px) {
   .stock-balance-container3 { width: 98%; }
   .filter-frame3 { flex-direction: column; align-items: stretch; }
-  .filter-group3 input,
-  .filter-group3 select { width: 100%; }
+  .table-scroll-container { max-height: 55vh; }
 }
