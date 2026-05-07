@@ -25,7 +25,7 @@
   color: #2c3e50;
 }
 
-/* ================= FILTER FRAME (Now same style as Store) ================= */
+/* ================= FILTER FRAME ================= */
 .filter-frame2 {
   display: flex;
   flex-wrap: wrap;
@@ -38,7 +38,6 @@
   align-items: center;
 }
 
-/* Each filter group */
 .filter-group2 {
   display: flex;
   flex-direction: column;
@@ -70,7 +69,7 @@
   background: #fff;
 }
 
-/* Specific width adjustments */
+/* Specific widths */
 .kitchen-filter { min-width: 140px; }
 .search-filter { min-width: 150px; }
 .item-filter { min-width: 130px; }

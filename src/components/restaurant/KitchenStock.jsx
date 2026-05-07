@@ -28,7 +28,7 @@ const KitchenBalanceStock = () => {
 
   roles = roles.map((r) => r.toLowerCase());
 
-  if (!(roles.includes("admin") || roles.includes("store"))) {
+  if (!(roles.includes("admin") || roles.includes("restaurant"))) {
     return (
       <div className="unauthorized">
         <h2>🚫 Access Denied</h2>
@@ -72,6 +72,7 @@ const KitchenBalanceStock = () => {
           search: search || undefined,
         },
       });
+
       setBalances(res.data || []);
     } catch (error) {
       console.error(error);
@@ -93,14 +94,12 @@ const KitchenBalanceStock = () => {
     0
   );
 
-  /* ================= UI ================= */
   return (
     <div className="stock-balance-container2">
       <div className="stock-balance-header">
         <h2>👨‍🍳 Kitchen Stock Balance Report</h2>
 
         <div className="filter-frame2">
-          {/* Kitchen */}
           <div className="filter-group2 kitchen-filter">
             <label>Kitchen</label>
             <select
@@ -116,7 +115,6 @@ const KitchenBalanceStock = () => {
             </select>
           </div>
 
-          {/* Date Range */}
           <div className="filter-group2">
             <label>Start Date</label>
             <input
@@ -135,7 +133,6 @@ const KitchenBalanceStock = () => {
             />
           </div>
 
-          {/* Search */}
           <div className="filter-group2 search-filter">
             <label>Search</label>
             <input
@@ -149,7 +146,6 @@ const KitchenBalanceStock = () => {
             />
           </div>
 
-          {/* Item */}
           <div className="filter-group2 item-filter">
             <label>Item</label>
             <select
