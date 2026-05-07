@@ -8,6 +8,7 @@
   background: #fafafa;
   border-radius: 6px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  box-sizing: border-box;
 }
 
 /* ================= HEADER ================= */
@@ -29,13 +30,14 @@
 .filter-frame3 {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 6px 8px;
+  gap: 8px;                    /* Reduced gap */
+  padding: 8px 10px;
   background: #ffffff;
   border-radius: 6px;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.08);
   width: 100%;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .filter-group3 {
@@ -43,13 +45,15 @@
   flex-direction: column;
   gap: 2px;
   flex: 1;
-  min-width: 120px;
+  min-width: 105px;            /* Smaller minimum width */
+  max-width: 160px;            /* Added max-width to prevent stretching */
 }
 
 .filter-group3 label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #333;
+  margin-bottom: 1px;
 }
 
 .filter-group3 input,
@@ -60,6 +64,8 @@
   font-size: 12px;
   background: #fafafa;
   width: 100%;
+  box-sizing: border-box;
+  height: 28px;                /* Consistent height */
 }
 
 .filter-group3 input:focus,
@@ -69,19 +75,20 @@
   background: #fff;
 }
 
-.category-filter { min-width: 140px; }
-.type-filter { min-width: 120px; }
-.search-filter { min-width: 150px; }
-.item-filter { min-width: 130px; }
+/* Specific filter widths */
+.category-filter { min-width: 125px; }
+.type-filter { min-width: 110px; }
+.search-filter { min-width: 135px; }
+.item-filter { min-width: 125px; }
 
 /* ================= TOTAL ================= */
 .total-stock3 {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   font-size: 14px;
   color: #2d572c;
   background: #e6f4ea;
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 4px;
   margin-top: 6px;
   align-self: flex-start;
@@ -89,7 +96,7 @@
 
 /* ================= SCROLLABLE TABLE ================= */
 .table-scroll-container {
-  max-height: 65vh;           /* ← Change this value as needed */
+  max-height: 65vh;
   overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -141,7 +148,24 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
-  .stock-balance-container3 { width: 98%; }
-  .filter-frame3 { flex-direction: column; align-items: stretch; }
-  .table-scroll-container { max-height: 55vh; }
+  .stock-balance-container3 { 
+    width: 98%; 
+    padding: 6px;
+  }
+  
+  .filter-frame3 { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .filter-group3 {
+    min-width: auto;
+    max-width: none;
+  }
+
+  .table-scroll-container { 
+    max-height: 55vh; 
+  }
 }

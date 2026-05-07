@@ -2,12 +2,13 @@
 .stock-balance-container1 {
   padding: 8px;
   font-family: Arial, sans-serif;
-  max-width: 1250px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
   background: #fafafa;
   border-radius: 6px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  box-sizing: border-box;
 }
 
 /* ================= HEADER ================= */
@@ -25,17 +26,18 @@
   color: #2c3e50;
 }
 
-/* ================= FILTER FRAME (Consistent with Store) ================= */
+/* ================= FILTER FRAME ================= */
 .filter-frame1 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 6px 8px;
+  padding: 9px 10px;
   background: #ffffff;
   border-radius: 6px;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.08);
   width: 100%;
-  align-items: center;
+  align-items: flex-start;     /* Better vertical alignment */
+  box-sizing: border-box;
 }
 
 .filter-group1 {
@@ -43,13 +45,15 @@
   flex-direction: column;
   gap: 2px;
   flex: 1;
-  min-width: 120px;
+  min-width: 110px;
+  max-width: 165px;
 }
 
 .filter-group1 label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #333;
+  margin-bottom: 1px;
 }
 
 .filter-group1 input,
@@ -60,6 +64,8 @@
   font-size: 12px;
   background: #fafafa;
   width: 100%;
+  box-sizing: border-box;
+  height: 28px;
 }
 
 .filter-group1 input:focus,
@@ -69,19 +75,29 @@
   background: #fff;
 }
 
-/* Filter width adjustments */
-.bar-filter { min-width: 140px; }
-.search-filter { min-width: 150px; }
-.item-filter { min-width: 130px; }
+/* ================= Specific Filter Adjustments ================= */
+.bar-filter {
+  min-width: 140px;        /* More space for Bar names */
+  max-width: 190px;
+  flex-shrink: 0;          /* Important: Prevent shrinking */
+}
+
+.search-filter {
+  min-width: 135px;
+}
+
+.item-filter {
+  min-width: 125px;
+}
 
 /* ================= TOTAL ================= */
 .total-stock1 {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   font-size: 14px;
   color: #2d572c;
   background: #e6f4ea;
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 4px;
   margin-top: 6px;
   align-self: flex-start;
@@ -141,7 +157,26 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
-  .stock-balance-container1 { width: 98%; }
-  .filter-frame1 { flex-direction: column; align-items: stretch; }
-  .table-scroll-container { max-height: 55vh; }
+  .stock-balance-container1 {
+    width: 98%;
+    padding: 6px;
+  }
+  
+  .filter-frame1 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .filter-group1,
+  .bar-filter {
+    min-width: auto;
+    max-width: none;
+    flex-shrink: 1;
+  }
+
+  .table-scroll-container {
+    max-height: 55vh;
+  }
 }

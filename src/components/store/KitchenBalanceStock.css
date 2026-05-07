@@ -8,6 +8,7 @@
   background: #fafafa;
   border-radius: 6px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  box-sizing: border-box;
 }
 
 /* ================= HEADER ================= */
@@ -25,32 +26,34 @@
   color: #2c3e50;
 }
 
-/* ================= FILTER FRAME (Now same style as Store) ================= */
+/* ================= FILTER FRAME ================= */
 .filter-frame2 {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 6px 8px;
+  gap: 8px;                    /* Reduced gap */
+  padding: 8px 10px;
   background: #ffffff;
   border-radius: 6px;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.08);
   width: 100%;
   align-items: center;
+  box-sizing: border-box;
 }
 
-/* Each filter group */
 .filter-group2 {
   display: flex;
   flex-direction: column;
   gap: 2px;
   flex: 1;
-  min-width: 120px;
+  min-width: 105px;            /* Smaller */
+  max-width: 160px;            /* Prevents stretching too much */
 }
 
 .filter-group2 label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #333;
+  margin-bottom: 1px;
 }
 
 .filter-group2 input,
@@ -61,6 +64,8 @@
   font-size: 12px;
   background: #fafafa;
   width: 100%;
+  box-sizing: border-box;
+  height: 28px;                /* Consistent & compact height */
 }
 
 .filter-group2 input:focus,
@@ -71,18 +76,18 @@
 }
 
 /* Specific width adjustments */
-.kitchen-filter { min-width: 140px; }
-.search-filter { min-width: 150px; }
-.item-filter { min-width: 130px; }
+.kitchen-filter { min-width: 125px; }
+.search-filter { min-width: 135px; }
+.item-filter { min-width: 125px; }
 
 /* ================= TOTAL ================= */
 .total-stock2 {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   font-size: 14px;
   color: #2d572c;
   background: #e6f4ea;
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 4px;
   margin-top: 6px;
   align-self: flex-start;
@@ -142,7 +147,24 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
-  .stock-balance-container2 { width: 98%; }
-  .filter-frame2 { flex-direction: column; align-items: stretch; }
-  .table-scroll-container { max-height: 55vh; }
+  .stock-balance-container2 { 
+    width: 98%; 
+    padding: 6px;
+  }
+  
+  .filter-frame2 { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .filter-group2 {
+    min-width: auto;
+    max-width: none;
+  }
+
+  .table-scroll-container { 
+    max-height: 55vh; 
+  }
 }
