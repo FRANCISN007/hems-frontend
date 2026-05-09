@@ -29,6 +29,7 @@ const ListGuestOrder = () => {
     guest_name: "",
     room_number: "",
     order_type: "",
+    created_at: "", // ✅ ADD THIS
     location_id: "",
     kitchen_id: "",
     items: [],
@@ -182,6 +183,7 @@ const ListGuestOrder = () => {
       guest_name: order.guest_name || "",
       room_number: order.room_number || "",
       order_type: order.order_type || "",
+      created_at: order.created_at || "",
       location_id: order.location_id || "",
       kitchen_id: order.kitchen_id || "",
       items: (order.items || []).map((i) => ({
@@ -240,10 +242,20 @@ const ListGuestOrder = () => {
     try {
       const payload = {
         guest_name: formData.guest_name,
+
         room_number: formData.room_number,
+
         order_type: formData.order_type,
+
+        // ✅ SEND ORDER DATE
+        created_at: formData.created_at
+          ? new Date(formData.created_at).toISOString()
+          : null,
+
         location_id: Number(formData.location_id) || null,
+
         kitchen_id: Number(formData.kitchen_id) || null,
+
         items: formData.items.map((i) => ({
           store_item_id: i.store_item_id,
           quantity: Number(i.quantity),
@@ -359,6 +371,7 @@ const ListGuestOrder = () => {
       <hr className="listorder-divider" />
 
       {/* Orders Table */}
+    
       <table className="listorder-table">
         <thead>
           <tr>
@@ -526,6 +539,30 @@ const ListGuestOrder = () => {
                     }
                   />
                 </div>
+
+
+                <div className="form-group">
+                  <label>Order Date</label>
+
+                  <input
+                    type="datetime-local"
+                    value={
+                      formData.created_at
+                        ? new Date(formData.created_at)
+                            .toISOString()
+                            .slice(0, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        created_at: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                
 
                 <div className="form-group">
                   <label>Room Number</label>
