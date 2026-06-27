@@ -333,3 +333,26 @@ button {
 
 
 
+
+
+.booking-table-wrapper {
+    max-height: 350px;      /* Change to any height you prefer */
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* Keep the table header visible while scrolling */
+.booking-table thead th {
+    position: sticky;
+    top: 0;
+    background: #202020;
+    z-index: 10;
+}
+
+/* Ensure proper table layout */
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
