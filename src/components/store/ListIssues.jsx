@@ -416,8 +416,8 @@ const ListIssues = () => {
       </div>
 
       {editingIssue && (
-        <div className="edit-modal-overlay">
-          <div className="edit-form">
+        <div className="bar-edit-modal-overlay">
+          <div className="bar-edit-form">
             <h3>Edit Issue</h3>
 
             <label>Bar:</label>
@@ -431,13 +431,13 @@ const ListIssues = () => {
 
             <h4>Items</h4>
 
-            <div className="items-scroll">
+            <div className="bar-items-scroll">
 
               {(formData.issue_items || []).map((row, index) => (
 
-                  <div className="item-row" key={index}>
+                  <div className="bar-item-row" key={index}>
 
-                      <div className="autocomplete">
+                      <div className="bar-autocomplete">
 
                           <input
                               type="text"
@@ -454,7 +454,7 @@ const ListIssues = () => {
 
                           {row.suggestions.length > 0 && (
 
-                              <ul className="suggestions-list">
+                              <ul className="bar-suggestions-list">
 
                                   {row.suggestions.map((item) => (
                                     <li
@@ -489,7 +489,7 @@ const ListIssues = () => {
 
                       <button
                           type="button"
-                          className="remove-line"
+                          className=" bar-remove-line"
                           onClick={() =>
                               removeIssueLine(index)
                           }
@@ -505,11 +505,11 @@ const ListIssues = () => {
 
           </div>
 
-            <button type="button" className="add-btn" onClick={addIssueLine}>➕ Add Item</button>
+            <button type="button" className="bar-add-btn" onClick={addIssueLine}>➕ Add Item</button>
 
-            <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-              <button className="save-btn" onClick={() => handleSubmitEdit(editingIssue)}>✅ Save</button>
-              <button className="cancel-btn" onClick={() => setEditingIssue(null)}>❌ Cancel</button>
+            <div className="bar-modal-actions">
+              <button className="bar-save-btn" onClick={() => handleSubmitEdit(editingIssue)}>✅ Save</button>
+              <button className="bar-cancel-btn" onClick={() => setEditingIssue(null)}>❌ Cancel</button>
             </div>
           </div>
         </div>

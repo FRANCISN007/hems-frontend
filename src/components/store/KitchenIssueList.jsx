@@ -337,7 +337,17 @@ const KitchenIssueList = () => {
                   }
                 />
 
-                <button onClick={() => removeIssueLine(idx)}>❌</button>
+                <button
+                  type="button"
+                  className="remove-line"
+                  onClick={() =>
+                      removeIssueLine(index)
+                  }
+              >
+
+                  ❌
+
+              </button>
               </div>
             ))}
 
