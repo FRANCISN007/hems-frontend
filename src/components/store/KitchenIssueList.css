@@ -164,108 +164,194 @@
   font-weight: bold;
 }
 
-/* ================= MODAL ================= */
-.edit-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+/* ================= EDIT MODAL ================= */
+
+.edit-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    padding:20px;
 }
 
-.edit-form {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 520px;
-  width: 92%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  max-height: 85vh;
-  overflow-y: auto;
+.edit-form{
+    background:#fff;
+    width:95%;
+    max-width:900px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:12px;
+    padding:24px;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
 }
 
-.edit-form h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  text-align: center;
+.edit-form h3{
+    margin:0 0 20px;
+    text-align:center;
+    font-size:24px;
+    color:#2c3e50;
 }
 
-.edit-form label {
-  display: block;
-  margin: 8px 0 3px;
-  font-weight: 600;
-  font-size: 13px;
-  color: #333;
+.edit-form h4{
+    margin:20px 0 12px;
+    font-size:17px;
+    color:#444;
+}
+
+.edit-form label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    color:#444;
 }
 
 .edit-form select,
-.edit-form input {
-  width: 100%;
-  padding: 7px;
-  border: 1px solid #bbb;
-  border-radius: 6px;
-  font-size: 13px;
-  margin-bottom: 8px;
+.edit-form>input[type="date"]{
+    width:100%;
+    height:44px;
+    border:1px solid #d5d5d5;
+    border-radius:8px;
+    padding:0 12px;
+    margin-bottom:14px;
+    font-size:14px;
+    box-sizing:border-box;
 }
 
-.item-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-  align-items: center;
+/* ================= ITEM LIST ================= */
+
+.items-scroll{
+    max-height:350px;
+    overflow-y:auto;
+    padding-right:5px;
 }
 
-.item-row select,
-.item-row input {
-  flex: 1;
+/* each row */
+
+.item-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    margin-bottom:12px;
 }
 
-.remove-line {
-  background: #e74c3c;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+/* ITEM COLUMN (takes almost all width) */
+
+.item-row select{
+    flex:1 1 auto;
+    min-width:0;
+    width:auto;
+    height:44px;
 }
 
-.add-btn {
-  background: #27ae60;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 8px 0;
+/* quantity */
+
+.item-row input[type="number"]{
+    flex:0 0 90px;
+    width:90px;
+    height:44px;
+    text-align:center;
 }
 
-.modal-actions button {
-  padding: 9px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-right: 8px;
+/* remove */
+
+.remove-line{
+    flex:0 0 10px;
+    width:10px;
+    height:42px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#9e5c54;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
 }
 
-.save-btn {
-  background-color: #27ae60;
-  color: white;
+.remove-line:hover{
+    background:#c0392b;
 }
 
-.cancel-btn {
-  background-color: #95a5a6;
-  color: white;
+/* add button */
+
+.add-btn{
+    margin-top:10px;
+    padding:10px 18px;
+    background:#27ae60;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .table-scroll-container {
-    max-height: 55vh;
-  }
+.add-btn:hover{
+    background:#1f8d4d;
+}
+
+/* modal buttons */
+
+.modal-actions1{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+}
+
+.save-btn,
+.cancel-btn{
+    padding:10px 22px;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.save-btn{
+    background:#27ae60;
+    color:#fff;
+}
+
+.save-btn:hover{
+    background:#1f8d4d;
+}
+
+.cancel-btn{
+    background:#7f8c8d;
+    color:#fff;
+}
+
+.cancel-btn:hover{
+    background:#616d70;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+    .edit-form{
+        width:100%;
+        padding:18px;
+    }
+
+    .item-row{
+        gap:8px;
+    }
+
+    .item-row input[type="number"]{
+        flex:0 0 75px;
+        width:75px;
+    }
+
+    .remove-line{
+        flex:0 0 10px;
+        width:10px;
+        height:36px;
+    }
 }

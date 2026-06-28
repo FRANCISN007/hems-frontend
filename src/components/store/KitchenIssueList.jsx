@@ -343,9 +343,9 @@ const KitchenIssueList = () => {
 
             <button onClick={addIssueLine}>➕ Add Item</button>
 
-            <div className="modal-actions">
-              <button onClick={handleSubmitEdit}>✅ Save</button>
-              <button onClick={() => setEditingIssue(null)}>❌ Cancel</button>
+            <div className="modal-actions1">
+              <button className="save-btn" onClick={() => handleSubmitEdit(editingIssue)}>✅ Save</button>
+              <button className="cancel-btn" onClick={() => setEditingIssue(null)}>❌ Cancel</button>
             </div>
           </div>
         </div>

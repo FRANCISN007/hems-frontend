@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axiosWithAuth from "../../utils/axiosWithAuth";
 import "./ListIssues.css";
 
@@ -18,6 +18,7 @@ const ListIssues = () => {
     issue_items: [],
   });
   const [originalIssueCounts, setOriginalIssueCounts] = useState({});
+  const fetchTimeout = useRef(null);
 
   const getToday = () => new Date().toISOString().split("T")[0];
 
@@ -51,6 +52,31 @@ const ListIssues = () => {
     setMessage(msg);
     setTimeout(() => setMessage(""), 3500);
   };
+
+  // =============================
+  // SEARCH STORE ITEMS
+  // =============================
+  const fetchItems = async (searchText) => {
+    if (!searchText.trim()) return [];
+
+    try {
+        const res = await axiosWithAuth().get(
+            "/store/items/simple-search",
+            {
+                params: {
+                    search: searchText,
+                    limit: 20,
+                },
+            }
+        );
+
+        return res.data || [];
+
+    } catch (err) {
+        console.error("Item search failed:", err);
+        return [];
+    }
+};
 
   // fetch bars and items once
   useEffect(() => {
@@ -92,14 +118,20 @@ const ListIssues = () => {
 
   const handleEditClick = (issue) => {
     const issue_items = (issue.issue_items || []).map((it) => ({
-      item_id: it.item?.id || "",
-      quantity: it.quantity || 0,
+      itemId: it.item?.id || "",
+      itemName: it.item?.name || "",
+      search: it.item?.name || "",
+      suggestions: [],
+      quantity: it.quantity || "",
     }));
 
     const orig = {};
+
     issue_items.forEach((it) => {
-      const id = Number(it.item_id);
+      const id = Number(it.itemId);
+
       if (!id) return;
+
       orig[id] = (orig[id] || 0) + Number(it.quantity || 0);
     });
 
@@ -108,7 +140,9 @@ const ListIssues = () => {
     setFormData({
       issue_to: "bar",
       issued_to_id: issue.issued_to_id || "",
-      issue_date: issue.issue_date ? issue.issue_date.split("T")[0] : getToday(),
+      issue_date: issue.issue_date
+        ? issue.issue_date.split("T")[0]
+        : getToday(),
       issue_items,
     });
 
@@ -116,14 +150,74 @@ const ListIssues = () => {
   };
 
   const handleFormChange = (index, field, value) => {
-    const newItems = [...formData.issue_items];
-    if (field === "quantity") value = Number(value || 0);
-    newItems[index] = { ...newItems[index], [field]: value };
-    setFormData({ ...formData, issue_items: newItems });
-  };
+    setFormData(prev => {
 
+        const updated = [...prev.issue_items];
+
+        if(field==="search"){
+            updated[index].search=value;
+            updated[index].itemId="";
+            updated[index].itemName="";
+        }
+
+        if(field==="quantity"){
+            updated[index].quantity=value;
+        }
+
+        if(field==="select_item"){
+            updated[index].itemId=value.id;
+            updated[index].itemName=value.name;
+            updated[index].search=value.name;
+            updated[index].suggestions=[];
+        }
+
+        return {
+            ...prev,
+            issue_items:updated
+        };
+
+    });
+
+    if(field==="search"){
+
+        if(fetchTimeout.current)
+            clearTimeout(fetchTimeout.current);
+
+        fetchTimeout.current=setTimeout(async()=>{
+
+            const results=await fetchItems(value);
+
+            setFormData(prev=>{
+
+                const rows=[...prev.issue_items];
+
+                rows[index].suggestions=results;
+
+                return{
+                    ...prev,
+                    issue_items:rows
+                };
+
+            });
+
+        },300);
+
+    }
+};
   const addIssueLine = () => {
-    setFormData({ ...formData, issue_items: [...(formData.issue_items || []), { item_id: "", quantity: 1 }] });
+    setFormData({
+      ...formData,
+      issue_items: [
+        ...formData.issue_items,
+        {
+          itemId: "",
+          itemName: "",
+          search: "",
+          suggestions: [],
+          quantity: "",
+        },
+      ],
+    });
   };
 
   const removeIssueLine = (index) => {
@@ -135,64 +229,93 @@ const ListIssues = () => {
   const handleSubmitEdit = async (id) => {
     try {
       if (!formData.issued_to_id) {
-        showMessage("❌ Select a bar to issue to.");
+        showMessage("❌ Please select a bar.");
         return;
       }
-      if (!formData.issue_items || formData.issue_items.length === 0) {
+
+      if (!formData.issue_items.length) {
         showMessage("❌ Add at least one item.");
         return;
       }
 
       const requested = {};
+
       for (const row of formData.issue_items) {
-        const iid = Number(row.item_id || 0);
+        const itemId = Number(row.itemId || 0);
         const qty = Number(row.quantity || 0);
-        if (!iid) {
-          showMessage("❌ Every line must have an item selected.");
+
+        if (!itemId) {
+          showMessage("❌ Select an item for every row.");
           return;
         }
-        if (!qty || qty <= 0) {
-          showMessage("❌ Quantity must be greater than 0 for all items.");
+
+        if (qty <= 0) {
+          showMessage("❌ Quantity must be greater than zero.");
           return;
         }
-        requested[iid] = (requested[iid] || 0) + qty;
+
+        requested[itemId] = (requested[itemId] || 0) + qty;
       }
 
-      for (const iidStr of Object.keys(requested)) {
-        const iid = Number(iidStr);
-        const reqQty = requested[iid];
-        const resp = await axiosWithAuth().get(`/store/stock/${iid}`);
-        const available = Number(resp.data?.available || 0);
-        const oldQty = Number(originalIssueCounts[iid] || 0);
+      // Validate stock
+
+      for (const itemId of Object.keys(requested)) {
+        const reqQty = requested[itemId];
+
+        const stockRes = await axiosWithAuth().get(
+          `/store/stock/${itemId}`
+        );
+
+        const available = Number(stockRes.data?.available || 0);
+
+        const oldQty = Number(
+          originalIssueCounts[itemId] || 0
+        );
+
         const allowed = available + oldQty;
 
         if (reqQty > allowed) {
-          const itemObj = items.find((it) => it.id === iid) || {};
-          showMessage(`❌ Not enough stock for "${itemObj.name}". Requested: ${reqQty}, Available: ${allowed}`);
+          const item =
+            items.find((i) => i.id === Number(itemId)) || {};
+
+          showMessage(
+            `❌ ${item.name} only has ${allowed} available.`
+          );
+
           return;
         }
       }
 
       const payload = {
-        issue_to: formData.issue_to,
+        issue_to: "bar",
         issued_to_id: Number(formData.issued_to_id),
         issue_date: formData.issue_date,
-        issue_items: formData.issue_items.map((it) => ({
-          item_id: Number(it.item_id),
-          quantity: Number(it.quantity),
+
+        issue_items: formData.issue_items.map((row) => ({
+          item_id: Number(row.itemId),
+          quantity: Number(row.quantity),
         })),
       };
 
-      await axiosWithAuth().put(`/store/bar-issues/${id}`, payload);
+      await axiosWithAuth().put(
+        `/store/bar-issues/${id}`,
+        payload
+      );
+
       showMessage("✅ Issue updated successfully.");
+
       setEditingIssue(null);
-      setFormData({ issue_to: "bar", issued_to_id: "", issue_date: getToday(), issue_items: [] });
+
       setOriginalIssueCounts({});
+
       fetchIssues();
     } catch (err) {
-      console.error("Update failed", err.response?.data || err.message);
-      const detail = err.response?.data?.detail || err.response?.data || err.message || "Update failed";
-      showMessage(`❌ ${detail}`);
+      console.error(err);
+
+      showMessage(
+        err.response?.data?.detail ||
+          "❌ Failed to update issue."
+      );
     }
   };
 
@@ -309,35 +432,78 @@ const ListIssues = () => {
             <h4>Items</h4>
 
             <div className="items-scroll">
-              {(formData.issue_items || []).map((item, index) => (
-                <div key={index} className="item-row">
-                  <select
-                    value={item.item_id}
-                    onChange={(e) => handleFormChange(index, "item_id", e.target.value)}
-                  >
-                    <option value="">-- Select an item --</option>
-                    {items.map(it => (
-                      <option key={it.id} value={it.id}>{it.name}</option>
-                    ))}
-                  </select>
 
-                  <input
-                    type="number"
-                    min={1}
-                    value={item.quantity}
-                    onChange={(e) => handleFormChange(index, "quantity", e.target.value)}
-                  />
+              {(formData.issue_items || []).map((row, index) => (
 
-                  <button
-                    type="button"
-                    className="remove-line"
-                    onClick={() => removeIssueLine(index)}
-                  >
-                    ❌
-                  </button>
-                </div>
+                  <div className="item-row" key={index}>
+
+                      <div className="autocomplete">
+
+                          <input
+                              type="text"
+                              placeholder="Search item..."
+                              value={row.search}
+                              onChange={(e)=>
+                                  handleFormChange(
+                                      index,
+                                      "search",
+                                      e.target.value
+                                  )
+                              }
+                          />
+
+                          {row.suggestions.length > 0 && (
+
+                              <ul className="suggestions-list">
+
+                                  {row.suggestions.map((item) => (
+                                    <li
+                                        key={item.id}
+                                        onClick={() =>
+                                            handleFormChange(index, "select_item", item)
+                                        }
+                                    >
+                                        {item.name}
+                                    </li>
+                                ))}
+
+                              </ul>
+
+                          )}
+
+                      </div>
+
+                      <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={row.quantity}
+                          onChange={(e)=>
+                              handleFormChange(
+                                  index,
+                                  "quantity",
+                                  e.target.value
+                              )
+                          }
+                      />
+
+                      <button
+                          type="button"
+                          className="remove-line"
+                          onClick={() =>
+                              removeIssueLine(index)
+                          }
+                      >
+
+                          ❌
+
+                      </button>
+
+                  </div>
+
               ))}
-            </div>
+
+          </div>
 
             <button type="button" className="add-btn" onClick={addIssueLine}>➕ Add Item</button>
 
