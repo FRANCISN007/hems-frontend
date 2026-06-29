@@ -475,8 +475,8 @@ const ListIssues = () => {
 
                       <input
                           type="number"
-                          min="0.1"
-                          step="0.1"
+                          min="1"
+                          step="1"
                           value={row.quantity}
                           onChange={(e)=>
                               handleFormChange(
