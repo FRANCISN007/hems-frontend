@@ -9,7 +9,7 @@
 
    /* 👇 ADD THESE */
   display: block;
-  max-height: 65vh;   /* controls visible height */
+  max-height: 85vh;   /* controls visible height */
   overflow-y: auto;   /* enables vertical scroll */
 
 }
