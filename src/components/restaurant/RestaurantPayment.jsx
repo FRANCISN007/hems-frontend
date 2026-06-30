@@ -179,36 +179,42 @@ const RestaurantPayment = () => {
 
       {/* Sales Table */}
       {sales.length > 0 ? (
-        <table className="sales-table">
-          <thead>
-            <tr>
-              <th>Sale ID</th>
-              <th>Date</th>
-              <th>Guest Name</th>
-              <th>Total</th>
-              <th>Paid</th>
-              <th>Balance</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((sale) => (
-              <tr key={sale.id}>
-                <td>{sale.id}</td>
-                <td>{new Date(sale.created_at).toLocaleDateString()}</td>
-                <td>{sale.guest_name}</td>
-                <td>₦{Number(sale.total_amount).toLocaleString()}</td>
-                <td>₦{Number(sale.amount_paid).toLocaleString()}</td>
-                <td>₦{Number(sale.balance).toLocaleString()}</td>
-                <td>
-                  <button className="btn-pay" onClick={() => openPaymentModal(sale)}>
-                    💳 Make Payment
-                  </button>
-                </td>
+        <div className="sales-table-wrapper">
+          <table className="sales-table">
+            <thead>
+              <tr>
+                <th>Sale ID</th>
+                <th>Date</th>
+                <th>Guest Name</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {sales.map((sale) => (
+                <tr key={sale.id}>
+                  <td>{sale.id}</td>
+                  <td>{new Date(sale.created_at).toLocaleDateString()}</td>
+                  <td>{sale.guest_name}</td>
+                  <td>₦{Number(sale.total_amount).toLocaleString()}</td>
+                  <td>₦{Number(sale.amount_paid).toLocaleString()}</td>
+                  <td>₦{Number(sale.balance).toLocaleString()}</td>
+                  <td>
+                    <button
+                      className="btn-pay"
+                      onClick={() => openPaymentModal(sale)}
+                    >
+                      💳 Make Payment
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         selectedLocation && <p>No outstanding sales for this location.</p>
       )}
@@ -290,37 +296,41 @@ const RestaurantPayment = () => {
               {currentSale.payments?.length > 0 && (
                 <div className="payment-history">
                   <h4>📜 Payment History</h4>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Amount</th>
-                        <th>Mode</th>
-                        <th>Bank</th>
-                        <th>Paid By</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentSale.payments.map((p) => (
-                        <tr key={p.id} style={{ color: p.is_void ? "red" : "" }}>
-                          <td>{p.id}</td>
-                          <td>₦{Number(p.amount_paid).toLocaleString()}</td>
-                          <td>{p.payment_mode}</td>
-                          <td>{p.bank || "N/A"}</td>
-                          <td>{p.paid_by || "N/A"}</td>
-                          <td>
-                            {formatDate(p.payment_date)}
 
-                            <br />
-                            <small style={{ color: "#888" }}>
-                              posted: {new Date(p.created_at).toLocaleDateString()}
-                            </small>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div className="payment-history-scroll">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Mode</th>
+                            <th>Bank</th>
+                            <th>Paid By</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentSale.payments.map((p) => (
+                            <tr key={p.id} style={{ color: p.is_void ? "red" : "" }}>
+                              <td>{p.id}</td>
+                              <td>₦{Number(p.amount_paid).toLocaleString()}</td>
+                              <td>{p.payment_mode}</td>
+                              <td>{p.bank || "N/A"}</td>
+                              <td>{p.paid_by || "N/A"}</td>
+                              <td>
+                                {formatDate(p.payment_date)}
+
+                                <br />
+                                <small style={{ color: "#888" }}>
+                                  posted: {new Date(p.created_at).toLocaleDateString()}
+                                </small>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
                 </div>
               )}
             </div>
@@ -350,3 +360,4 @@ const RestaurantPayment = () => {
 };
 
 export default RestaurantPayment;
+
