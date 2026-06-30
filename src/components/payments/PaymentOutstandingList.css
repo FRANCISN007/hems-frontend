@@ -11,6 +11,42 @@
 
 }
 
+/* ==============================
+   Scrollable Outstanding Table
+============================== */
+
+.outstanding-table-wrapper {
+  height: 450px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 2px solid #293552;
+  border-radius: 10px;
+  background: #fff;
+  margin-top: 10px;
+}
+
+.outstanding-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.outstanding-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #293552;
+  color: #fff;
+}
+
+.outstanding-table tbody tr:nth-child(even) {
+  background: #f2f7fa;
+}
+
+.outstanding-table tbody tr:hover {
+  background: #d0ecf9;
+}
+
+
 .no-margin {
   margin-top: 0;
   margin-bottom: 5px;
@@ -27,7 +63,8 @@
 .outstanding-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.88rem; /* slightly smaller text */
+  font-size: 0.88rem;
+  margin: 0;
 }
 
 .outstanding-table th,

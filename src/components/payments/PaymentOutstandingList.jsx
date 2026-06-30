@@ -80,43 +80,48 @@ const PaymentOutstandingList = () => {
       ) : outstandingData.length === 0 ? (
         <p>No outstanding payments found.</p>
       ) : (
-        <table className="outstanding-table">
-          <thead>
-            <tr>
-              <th>ID</th>  
-              <th>Guest Name</th>
-              <th>Room No</th>
-              <th>Booking Date</th>
-              <th>Total Due (₦)</th>
-              <th>Total Paid (₦)</th>
-              <th>Discount (₦)</th>
-              <th>Amount Due (₦)</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {outstandingData.map((booking) => (
-              <tr key={booking.booking_id}>
-                <td>{booking.booking_id}</td>
-                <td>{booking.guest_name}</td>
-                <td>{booking.room_number}</td>
-                <td>{new Date(booking.booking_date).toLocaleDateString()}</td>
-                <td>{booking.total_due.toLocaleString()}</td>
-                <td>{booking.total_paid.toLocaleString()}</td>
-                <td>{booking.discount_allowed.toLocaleString()}</td>
-                <td><strong>₦{booking.amount_due.toLocaleString()}</strong></td>
-                <td>
-                  <button
-                    className="pay-button"
-                    onClick={() => handleMakePayment(booking)}
-                  >
-                    Make Payment
-                  </button>
-                </td>
+        <div className="outstanding-table-wrapper">
+          <table className="outstanding-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Guest Name</th>
+                <th>Room No</th>
+                <th>Booking Date</th>
+                <th>Total Due (₦)</th>
+                <th>Total Paid (₦)</th>
+                <th>Discount (₦)</th>
+                <th>Amount Due (₦)</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {outstandingData.map((booking) => (
+                <tr key={booking.booking_id}>
+                  <td>{booking.booking_id}</td>
+                  <td>{booking.guest_name}</td>
+                  <td>{booking.room_number}</td>
+                  <td>{new Date(booking.booking_date).toLocaleDateString()}</td>
+                  <td>{booking.total_due.toLocaleString()}</td>
+                  <td>{booking.total_paid.toLocaleString()}</td>
+                  <td>{booking.discount_allowed.toLocaleString()}</td>
+                  <td>
+                    <strong>₦{booking.amount_due.toLocaleString()}</strong>
+                  </td>
+                  <td>
+                    <button
+                      className="pay-button"
+                      onClick={() => handleMakePayment(booking)}
+                    >
+                      Make Payment
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
