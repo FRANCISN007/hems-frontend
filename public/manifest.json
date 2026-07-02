@@ -17,10 +17,12 @@
       "sizes": "512x512",
       "type": "image/jpeg"
     }
-    
+
   ],
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#0b4a8b",
   "background_color": "#ffffff"
 }
+
+
