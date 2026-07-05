@@ -96,7 +96,7 @@ const StockAdjustment = () => {
         </select>
 
         {/* Quantity */}
-        <label>Quantity to Deduct</label>
+        <label>Quantity to Adjust (exp:5 to remove, -5 to add)</label>
         <input
           type="number"
           min="1"
