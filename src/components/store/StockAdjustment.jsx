@@ -96,12 +96,13 @@ const StockAdjustment = () => {
         </select>
 
         {/* Quantity */}
-        <label>Quantity to Adjust (exp:5 to remove, -5 to add)</label>
+        <label>Quantity Adjustment</label>
         <input
           type="number"
-          min="1"
+          step="1"
           value={quantityAdjusted}
           onChange={(e) => setQuantityAdjusted(e.target.value)}
+          placeholder="Example: +5 to add, -5 to remove"
         />
 
         {/* Reason */}
