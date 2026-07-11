@@ -102,7 +102,7 @@ const StockAdjustment = () => {
           step="1"
           value={quantityAdjusted}
           onChange={(e) => setQuantityAdjusted(e.target.value)}
-          placeholder="Example: +5 to add, -5 to remove"
+          placeholder="Example: -5 to add, +5 to remove"
         />
 
         {/* Reason */}
