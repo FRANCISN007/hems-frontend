@@ -599,74 +599,78 @@ const GuestOrderCreate = () => {
             ITEMS TABLE
         ========================= */}
         {order.items.length > 0 && (
-          <table className="guestorder-table">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Unit Price</th>
-                <th>Line Total</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.name}</td>
-
-                  <td>{r.quantity}</td>
-
-                  <td>
-                    {currencyNGN(r.unitPrice)}
-                  </td>
-
-                  <td>
-                    {currencyNGN(r.lineTotal)}
-                  </td>
-
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        removeItem(i)
-                      }
-                    >
-                      ❌
-                    </button>
-                  </td>
+          <div className="guestorder-table-wrapper">
+            <table className="guestorder-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Unit Price</th>
+                  <th>Line Total</th>
+                  <th>Remove</th>
                 </tr>
-              ))}
+              </thead>
 
-              <tr>
-                <td
-                  colSpan="3"
-                  style={{
-                    textAlign: "right",
-                    fontWeight: 600,
-                  }}
-                >
-                  Total
-                </td>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={i}>
+                    <td>{r.name}</td>
 
-                <td
-                  style={{
-                    fontWeight: 700,
-                  }}
-                >
-                  {currencyNGN(grandTotal)}
-                </td>
+                    <td>{r.quantity}</td>
 
-                <td />
-              </tr>
-            </tbody>
-          </table>
+                    <td>
+                      {currencyNGN(r.unitPrice)}
+                    </td>
+
+                    <td>
+                      {currencyNGN(r.lineTotal)}
+                    </td>
+
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          removeItem(i)
+                        }
+                      >
+                        ❌
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Total
+                  </td>
+
+                  <td
+                    style={{
+                      fontWeight: 700,
+                    }}
+                  >
+                    {currencyNGN(grandTotal)}
+                  </td>
+
+                  <td />
+                </tr>
+              </tbody>
+            </table>
+          </div>
         )}
 
         {/* SUBMIT */}
-        <button type="submit">
-          ✅ Create Order
-        </button>
+        <div className="submit-container">
+          <button type="submit" className="submit-btn">
+            🧾 Create Guest Order
+          </button>
+        </div>
       </form>
     </div>
   );

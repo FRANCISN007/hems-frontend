@@ -1,7 +1,7 @@
 /* Container */
 .guestorder-container {
   max-width: 1000px;
-  margin: 40px auto;
+  margin: 2px auto;
   padding: 30px 25px;
   font-size: 18px;
   background: #ffffff;
@@ -160,22 +160,41 @@
   background: #bb2d3b;
 }
 
+
+
+
+
+/* Create Order button */
 .submit-btn {
-  margin-top: 20px;
-  padding: 12px 20px;
+  min-width: 50px;
+  padding: 4px 8px;
   border: none;
-  background: #007bff;
-  color: white;
   border-radius: 8px;
+  background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s, transform 0.1s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
 }
 
 .submit-btn:hover {
-  background: #0056b3;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #0b5ed7, #084298);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.4);
 }
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 
 /* Message */
 .guestorder-message {
@@ -190,4 +209,45 @@
 
 .guestorder-message.error {
   color: #dc3545;
+}
+
+
+
+/* Scrollable guest order table */
+.guestorder-table-wrapper {
+  width: 100%;
+  flex: 0 0 100%;      /* Force it onto its own row */
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 2px;
+  border: 1px solid #aca7a7;
+  border-radius: 8px;
+}
+
+
+/* Sticky header */
+.guestorder-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #dfe2e4;
+}
+
+/* Scrollbar styling */
+.guestorder-table-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.guestorder-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.guestorder-table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.guestorder-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
