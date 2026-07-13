@@ -267,73 +267,76 @@ const BarSalesCreate = () => {
           </div>
         </div>
 
-        <table className="sale-table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Qty</th>
-              <th>Price (₦)</th>
-              <th>Total (₦)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {saleItems.map((row, index) => (
-              <tr key={index}>
-                <td>
-                  <div className="autocomplete">
-                    <input
-                      type="text"
-                      placeholder="Type to search item..."
-                      value={row.search}
-                      onChange={(e) => handleRowChange(index, "search", e.target.value)}
-                    />
-                    {row.suggestions.length > 0 && (
-                      <ul className="suggestions-list">
-                        {row.suggestions.map((item) => (
-                          <li key={item.item_id} onClick={() => handleRowChange(index, "select_item", item)}>
-                            {item.item_name} (₦{item.selling_price})
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min="1"
-                    value={row.quantity}
-                    onChange={(e) => handleRowChange(index, "quantity", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min="0"
-                    value={row.selling_price}
-                    onChange={(e) => handleRowChange(index, "selling_price", e.target.value)}
-                  />
-                </td>
-                <td>₦{row.total.toLocaleString()}</td>
-                <td>
-                  <button type="button" className="remove-btn" onClick={() => handleRemoveRow(index)}>
-                    ❌
-                  </button>
-                </td>
+        <div className="sale-table-wrapper">
+
+          <table className="sale-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price (₦)</th>
+                <th>Total (₦)</th>
+                <th></th>
               </tr>
-            ))}
-            <tr className="grand-total-row">
-              <td colSpan="3" style={{ textAlign: "right" }}>
-                <strong>Grand Total:</strong>
-              </td>
-              <td>
-                <strong>₦{totalAmount.toLocaleString()}</strong>
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {saleItems.map((row, index) => (
+                <tr key={index}>
+                  <td>
+                    <div className="autocomplete">
+                      <input
+                        type="text"
+                        placeholder="Type to search item..."
+                        value={row.search}
+                        onChange={(e) => handleRowChange(index, "search", e.target.value)}
+                      />
+                      {row.suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                          {row.suggestions.map((item) => (
+                            <li key={item.item_id} onClick={() => handleRowChange(index, "select_item", item)}>
+                              {item.item_name} (₦{item.selling_price})
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="1"
+                      value={row.quantity}
+                      onChange={(e) => handleRowChange(index, "quantity", e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      value={row.selling_price}
+                      onChange={(e) => handleRowChange(index, "selling_price", e.target.value)}
+                    />
+                  </td>
+                  <td>₦{row.total.toLocaleString()}</td>
+                  <td>
+                    <button type="button" className="remove-btn" onClick={() => handleRemoveRow(index)}>
+                      ❌
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              <tr className="grand-total-row">
+                <td colSpan="3" style={{ textAlign: "right" }}>
+                  <strong>Grand Total:</strong>
+                </td>
+                <td>
+                  <strong>₦{totalAmount.toLocaleString()}</strong>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+       </div> 
 
         <div className="buttons-row">
           <button type="button" className="add-btn" onClick={handleAddRow}>

@@ -149,3 +149,41 @@
 .preview-btn:hover {
   background: #363636;
 }
+
+
+
+/* Scrollable table */
+.sale-table-wrapper {
+  max-height: 400px;      /* Adjust as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* Keep header visible while scrolling */
+.sale-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4;
+  z-index: 10;
+}
+
+/* Nice scrollbar */
+.sale-table-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sale-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.sale-table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.sale-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
