@@ -154,7 +154,7 @@
 
 /* Scrollable table */
 .sale-table-wrapper {
-  max-height: 400px;      /* Adjust as needed */
+  max-height: 370px;      /* Adjust as needed */
   overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid #ddd;
