@@ -639,31 +639,21 @@ const GuestOrderCreate = () => {
                   </tr>
                 ))}
 
-                <tr>
-                  <td
-                    colSpan="3"
-                    style={{
-                      textAlign: "right",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Total
-                  </td>
-
-                  <td
-                    style={{
-                      fontWeight: 700,
-                    }}
-                  >
-                    {currencyNGN(grandTotal)}
-                  </td>
-
-                  <td />
-                </tr>
+                
               </tbody>
             </table>
           </div>
+          
         )}
+
+        <div className="guestorder-total">
+          <div className="guestorder-total-spacer"></div>
+
+          <div className="guestorder-total-value">
+            <span>Total:</span>
+            <strong>{currencyNGN(grandTotal)}</strong>
+          </div>
+        </div>
 
         {/* SUBMIT */}
         <div className="submit-container">
