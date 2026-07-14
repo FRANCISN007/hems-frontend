@@ -6,6 +6,7 @@ const BarStockAdjustment = () => {
   const [bars, setBars] = useState([]);
   const [barId, setBarId] = useState("");
   const [items, setItems] = useState([]);
+  const [itemSearch, setItemSearch] = useState("");
   const [itemId, setItemId] = useState("");
   const [quantityAdjusted, setQuantityAdjusted] = useState("");
   const [reason, setReason] = useState("");
@@ -15,7 +16,7 @@ const BarStockAdjustment = () => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const roles = user.roles || [];
 
-  // ✅ Restrict access: only admin and bar can create payments
+  // ✅ Restrict access
   if (!(roles.includes("admin") || roles.includes("bar"))) {
     return (
       <div className="unauthorized">
@@ -25,12 +26,14 @@ const BarStockAdjustment = () => {
     );
   }
 
-
-  // ⏬ Fetch bars for dropdown
+  // -----------------------------
+  // Fetch Bars
+  // -----------------------------
   useEffect(() => {
     const fetchBars = async () => {
       try {
         const res = await axiosWithAuth().get("/bar/bars/simple");
+
         if (Array.isArray(res.data)) {
           setBars(res.data);
         } else {
@@ -42,20 +45,29 @@ const BarStockAdjustment = () => {
         setBars([]);
       }
     };
+
     fetchBars();
   }, []);
 
-  // ⏬ Fetch items for dropdown
+  // -----------------------------
+  // Fetch Items
+  // -----------------------------
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const res = await axiosWithAuth().get("/store/bar-items/simple");
-        setItems(Array.isArray(res.data) ? res.data : []);
+
+        const sortedItems = (Array.isArray(res.data) ? res.data : []).sort(
+          (a, b) => a.name.localeCompare(b.name)
+        );
+
+        setItems(sortedItems);
       } catch (err) {
         console.error("❌ Failed to fetch items:", err);
         setItems([]);
       }
     };
+
     fetchItems();
   }, []);
 
@@ -66,8 +78,19 @@ const BarStockAdjustment = () => {
     }
   }, [message]);
 
+  // -----------------------------
+  // Filtered Items
+  // -----------------------------
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(itemSearch.toLowerCase())
+  );
+
+  // -----------------------------
+  // Submit
+  // -----------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!barId || !itemId || !quantityAdjusted || !reason) {
       setMessage("⚠ Please fill in all fields.");
       return;
@@ -80,9 +103,11 @@ const BarStockAdjustment = () => {
         quantity_adjusted: parseInt(quantityAdjusted),
         reason: reason.trim(),
       });
+
       setMessage("✅ Stock adjustment successful!");
       setBarId("");
       setItemId("");
+      setItemSearch("");
       setQuantityAdjusted("");
       setReason("");
     } catch (error) {
@@ -94,13 +119,19 @@ const BarStockAdjustment = () => {
   return (
     <div className="bar-stock-adjustment-container">
       <h2>🔧 Bar Stock Adjustment</h2>
+
       {message && <div className="message">{message}</div>}
 
       <form onSubmit={handleSubmit} className="adjustment-form">
+
         {/* Bar Selection */}
         <label>Bar</label>
-        <select value={barId} onChange={(e) => setBarId(e.target.value)}>
+        <select
+          value={barId}
+          onChange={(e) => setBarId(e.target.value)}
+        >
           <option value="">-- Select Bar --</option>
+
           {bars.map((bar) => (
             <option key={bar.id} value={bar.id}>
               {bar.name}
@@ -108,13 +139,27 @@ const BarStockAdjustment = () => {
           ))}
         </select>
 
+        {/* Search Item */}
+        <label>Search Item</label>
+        <input
+          type="text"
+          value={itemSearch}
+          placeholder="Search by item name..."
+          onChange={(e) => setItemSearch(e.target.value)}
+        />
+
         {/* Item Selection */}
         <label>Item</label>
-        <select value={itemId} onChange={(e) => setItemId(e.target.value)}>
+        <select
+          value={itemId}
+          onChange={(e) => setItemId(e.target.value)}
+        >
           <option value="">-- Select Item --</option>
-          {items.map((item) => (
+
+          {filteredItems.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name} ({item.unit}) - ₦{item.unit_price?.toLocaleString()}
+              {item.name} ({item.unit}) - ₦
+              {item.unit_price?.toLocaleString()}
             </option>
           ))}
         </select>

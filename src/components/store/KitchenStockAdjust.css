@@ -1,115 +1,158 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+/* ============================
+   Stock Adjustment Form
+============================ */
 
 .stock-adjustment-container {
-  background: rgb(247, 244, 244);
-  padding: 25px;
-  border-radius: 12px;
+  width: 100%;
   max-width: 520px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  position: relative;
+  margin: 0px auto;
+  padding: 25px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
-.form-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 15px;
+.stock-adjustment-container h2 {
+  margin: 0 0 10px;
+  text-align: center;
+  color: #2c3e50;
+  font-size: 22px;
 }
 
-.form-header h2 {
-  margin: 0;
-  color: #333;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #888;
-  cursor: pointer;
-  padding: 5px 12px;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.close-btn:hover {
-  color: #e74c3c;
-  background: rgba(231, 76, 60, 0.1);
-}
+/* ============================
+   Messages
+============================ */
 
 .message {
   padding: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   border-radius: 6px;
-  font-weight: bold;
   text-align: center;
+  font-weight: bold;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
 }
 
-.message.success {
-  background: #2ecc71;
-  color: white;
-}
-
-.message.error {
-  background: #e74c3c;
-  color: white;
-}
+/* ============================
+   Form
+============================ */
 
 .adjustment-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .adjustment-form label {
-  font-weight: bold;
+  font-weight: 600;
   color: #444;
+  margin-bottom: -8px;
 }
 
 .adjustment-form select,
 .adjustment-form input,
 .adjustment-form textarea {
-  padding: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfcfcf;
   border-radius: 6px;
-  border: 1px solid #ccc;
   font-size: 14px;
+  box-sizing: border-box;
+  transition: 0.2s ease;
+  background: #fff;
 }
 
-.adjust-btn {
-  background: #3498db;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
-  font-size: 16px;
+.adjustment-form select:focus,
+.adjustment-form input:focus,
+.adjustment-form textarea:focus {
+  outline: none;
+  border-color: #2d89ef;
+  box-shadow: 0 0 4px rgba(45, 137, 239, 0.25);
 }
 
-.adjust-btn:hover:not(:disabled) {
-  background: #2980b9;
+.adjustment-form textarea {
+  resize: vertical;
+  min-height: 90px;
 }
 
-.adjust-btn:disabled {
-  background: #95a5a6;
+/* ============================
+   Disabled Controls
+============================ */
+
+.adjustment-form select:disabled,
+.adjustment-form input:disabled,
+.adjustment-form textarea:disabled {
+  background: #f4f4f4;
   cursor: not-allowed;
 }
 
+/* ============================
+   Button
+============================ */
 
+.adjust-btn {
+  margin-top: 7px;
+  padding: 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
+.adjust-btn:hover {
+  background: #0056b3;
+}
 
+.adjust-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* ============================
+   Unauthorized
+============================ */
+
+.unauthorized {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 30px;
+  text-align: center;
+  background: #fff3f3;
+  border: 1px solid #ffcaca;
+  border-radius: 10px;
+}
+
+.unauthorized h2 {
+  color: #d32f2f;
+  margin-bottom: 10px;
+}
+
+.unauthorized p {
+  color: #555;
+}
+
+/* ============================
+   Responsive
+============================ */
+
+@media (max-width: 768px) {
+  .stock-adjustment-container {
+    width: 95%;
+    padding: 18px;
+  }
+
+  .stock-adjustment-container h2 {
+    font-size: 20px;
+  }
+
+  .adjust-btn {
+    width: 100%;
+  }
+}

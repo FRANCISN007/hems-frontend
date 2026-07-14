@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axiosWithAuth from "../../utils/axiosWithAuth";
-import "./KitchenStockAdjust.css"; // ✅ css
+import "./KitchenStockAdjust.css";
 
 const KitchenStockAdjust = () => {
   const [kitchens, setKitchens] = useState([]);
   const [items, setItems] = useState([]);
+  const [itemSearch, setItemSearch] = useState("");
   const [kitchenId, setKitchenId] = useState("");
   const [itemId, setItemId] = useState("");
   const [quantityAdjusted, setQuantityAdjusted] = useState("");
@@ -47,6 +48,7 @@ const KitchenStockAdjust = () => {
     } else {
       setItems([]);
       setItemId("");
+      setItemSearch("");
     }
   }, [kitchenId]);
 
@@ -74,14 +76,26 @@ const KitchenStockAdjust = () => {
       const res = await axios.get(
         `/kitchen/inventory/simple?kitchen_id=${kitchenId}`
       );
-      setItems(res.data || []);
-      setItemId(""); // reset item when kitchen changes
+
+      const sortedItems = [...(res.data || [])].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+      setItems(sortedItems);
+      setItemId("");
+      setItemSearch("");
     } catch (error) {
       console.error("Error fetching kitchen items:", error);
       setItems([]);
     }
   };
 
+  // -----------------------------
+  // FILTER ITEMS
+  // -----------------------------
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(itemSearch.toLowerCase())
+  );
 
   // -----------------------------
   // SUBMIT
@@ -96,6 +110,7 @@ const KitchenStockAdjust = () => {
 
     try {
       const axios = axiosWithAuth();
+
       await axios.post("/kitchen/adjust", {
         kitchen_id: parseInt(kitchenId),
         item_id: parseInt(itemId),
@@ -105,12 +120,13 @@ const KitchenStockAdjust = () => {
 
       setMessage("✅ Kitchen stock adjusted successfully!");
 
-      // ✅ RESET FORM
+      // Reset form
       setItemId("");
+      setItemSearch("");
       setQuantityAdjusted("");
       setReason("");
 
-      // ✅ AUTO REFRESH INVENTORY
+      // Refresh inventory
       fetchKitchenItems(kitchenId);
 
     } catch (error) {
@@ -119,7 +135,6 @@ const KitchenStockAdjust = () => {
     }
   };
 
-
   return (
     <div className="stock-adjustment-container">
       <h2>Kitchen Stock Adjustment</h2>
@@ -127,6 +142,7 @@ const KitchenStockAdjust = () => {
       {message && <div className="message">{message}</div>}
 
       <form onSubmit={handleSubmit} className="adjustment-form">
+
         {/* Kitchen */}
         <label>Kitchen</label>
         <select
@@ -134,12 +150,23 @@ const KitchenStockAdjust = () => {
           onChange={(e) => setKitchenId(e.target.value)}
         >
           <option value="">-- Select Kitchen --</option>
+
           {kitchens.map((k) => (
             <option key={k.id} value={k.id}>
               {k.name}
             </option>
           ))}
         </select>
+
+        {/* Search */}
+        <label>Search Item</label>
+        <input
+          type="text"
+          placeholder="Search item..."
+          value={itemSearch}
+          onChange={(e) => setItemSearch(e.target.value)}
+          disabled={!kitchenId}
+        />
 
         {/* Item */}
         <label>Item</label>
@@ -149,7 +176,8 @@ const KitchenStockAdjust = () => {
           disabled={!kitchenId}
         >
           <option value="">-- Select Item --</option>
-          {items.map((item) => (
+
+          {filteredItems.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name} ({item.unit}) – Available: {item.quantity}
             </option>
@@ -163,6 +191,7 @@ const KitchenStockAdjust = () => {
           min="1"
           value={quantityAdjusted}
           onChange={(e) => setQuantityAdjusted(e.target.value)}
+          placeholder="Example: -5 to add, +5 to remove"
         />
 
         {/* Reason */}
@@ -171,11 +200,12 @@ const KitchenStockAdjust = () => {
           rows="3"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-        ></textarea>
+        />
 
         <button type="submit" className="adjust-btn">
           Adjust Kitchen Stock
         </button>
+
       </form>
     </div>
   );
