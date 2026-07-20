@@ -278,6 +278,8 @@ const ListBarPayment = () => {
 
       {/* Vertical Scroll Table */}
       <div className="table-scroll-container">
+
+        {/* Payment Table */}
         <table className="bar-payment-table">
           <thead>
             <tr>
@@ -296,74 +298,162 @@ const ListBarPayment = () => {
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {payments.map((p) => (
               <tr
                 key={p.id}
-                className={p.status?.toLowerCase() === "voided payment" ? "void-row" : ""}
+                className={
+                  p.status?.toLowerCase() === "voided payment"
+                    ? "void-row"
+                    : ""
+                }
               >
                 <td>{p.id}</td>
                 <td>{p.bar_sale_id}</td>
                 <td>{formatAmount(p.sale_amount)}</td>
                 <td>{formatAmount(p.amount_paid)}</td>
                 <td>{formatAmount(p.cumulative_paid)}</td>
-                <td style={{ color: p.balance_due > 0 ? "red" : "green" }}>
+
+                <td
+                  style={{
+                    color: p.balance_due > 0 ? "red" : "green",
+                  }}
+                >
                   {formatAmount(p.balance_due)}
                 </td>
+
                 <td>{p.payment_method || "-"}</td>
                 <td>{p.bank || "-"}</td>
                 <td>{p.note || "-"}</td>
+
                 <td>
-                  {p.date_paid ? new Date(p.date_paid).toLocaleDateString() : "-"}
+                  {p.date_paid
+                    ? new Date(p.date_paid).toLocaleDateString()
+                    : "-"}
                 </td>
+
                 <td>{p.created_by || "-"}</td>
-                <td className={`status ${p.status?.toLowerCase().replace(/\s+/g, "-")}`}>
-                  {p.status}
+
+                <td className="status-cell">
+                  <span
+                    className={`status ${p.status
+                      ?.toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                  >
+                    {p.status}
+                  </span>
                 </td>
+
                 <td>
-                  <button className="btn-edit" onClick={() => handleEdit(p)}>✏️ Edit</button>
-                  <button className="btn-delete" onClick={() => handleDelete(p.id)}>🗑️ Delete</button>
-                  <button className="btn-void" onClick={() => handleVoid(p.id)} disabled={p.status === "voided payment"}>🚫 Void</button>
-                  <button className="btn-print" onClick={() => handlePrint(p)}>🖨 Print</button>
+                  <button
+                    className="btn-edit"
+                    onClick={() => handleEdit(p)}
+                  >
+                    ✏️ Edit
+                  </button>
+
+                  <button
+                    className="btn-delete"
+                    onClick={() => handleDelete(p.id)}
+                  >
+                    🗑️ Delete
+                  </button>
+
+                  <button
+                    className="btn-void"
+                    onClick={() => handleVoid(p.id)}
+                    disabled={p.status === "voided payment"}
+                  >
+                    🚫 Void
+                  </button>
+
+                  <button
+                    className="btn-print"
+                    onClick={() => handlePrint(p)}
+                  >
+                    🖨 Print
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
 
-      {summary && (
-        <>
-          <div className="main-summary-section">
-            <h3>📊 Main Summary</h3>
-            <div className="main-summary-grid">
-              <div className="summary-card"><strong>Total Sales:</strong> {formatAmount(summary.total_sales)}</div>
-              <div className="summary-card"><strong>Total Paid:</strong> {formatAmount(summary.total_paid)}</div>
-              <div className="summary-card"><strong>Total Due:</strong> {formatAmount(summary.total_due)}</div>
-              <div className="summary-card"><strong>Total Cash:</strong> {formatAmount(summary.total_cash)}</div>
-              <div className="summary-card"><strong>Total POS:</strong> {formatAmount(summary.total_pos)}</div>
-              <div className="summary-card"><strong>Total Transfer:</strong> {formatAmount(summary.total_transfer)}</div>
-            </div>
-          </div>
+        {/* Summary */}
+        {summary && (
+          <>
+            <div className="main-summary-section">
+              <h3>📊 Main Summary</h3>
 
-          {summary.banks && (
-            <div className="bank-summary-section">
-              <h3>🏦 Bank Summary</h3>
-              <div className="bank-summary-grid">
-                {Object.entries(summary.banks)
-                  .filter(([bankName]) => bankName && bankName.toUpperCase() !== "NO BANK")
-                  .map(([bankName, data]) => (
-                    <div key={bankName} className="bank-summary-card">
-                      <h4>{bankName}</h4>
-                      <p><strong>POS:</strong> {formatAmount(data.pos || 0)}</p>
-                      <p><strong>Transfer:</strong> {formatAmount(data.transfer || 0)}</p>
-                    </div>
-                  ))}
+              <div className="main-summary-grid">
+                <div className="summary-card">
+                  <strong>Total Sales:</strong>{" "}
+                  {formatAmount(summary.total_sales)}
+                </div>
+
+                <div className="summary-card">
+                  <strong>Total Paid:</strong>{" "}
+                  {formatAmount(summary.total_paid)}
+                </div>
+
+                <div className="summary-card">
+                  <strong>Total Due:</strong>{" "}
+                  {formatAmount(summary.total_due)}
+                </div>
+
+                <div className="summary-card">
+                  <strong>Total Cash:</strong>{" "}
+                  {formatAmount(summary.total_cash)}
+                </div>
+
+                <div className="summary-card">
+                  <strong>Total POS:</strong>{" "}
+                  {formatAmount(summary.total_pos)}
+                </div>
+
+                <div className="summary-card">
+                  <strong>Total Transfer:</strong>{" "}
+                  {formatAmount(summary.total_transfer)}
+                </div>
               </div>
             </div>
-          )}
-        </>
-      )}
+
+            {summary.banks && (
+              <div className="bank-summary-section">
+                <h3>🏦 Bank Summary</h3>
+
+                <div className="bank-summary-grid">
+                  {Object.entries(summary.banks)
+                    .filter(
+                      ([bankName]) =>
+                        bankName &&
+                        bankName.toUpperCase() !== "NO BANK"
+                    )
+                    .map(([bankName, data]) => (
+                      <div
+                        key={bankName}
+                        className="bank-summary-card"
+                      >
+                        <h4>{bankName}</h4>
+
+                        <p>
+                          <strong>POS:</strong>{" "}
+                          {formatAmount(data.pos || 0)}
+                        </p>
+
+                        <p>
+                          <strong>Transfer:</strong>{" "}
+                          {formatAmount(data.transfer || 0)}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
 
       {/* Edit Modal */}
       {editingPayment && (
@@ -416,3 +506,4 @@ const ListBarPayment = () => {
 };
 
 export default ListBarPayment;
+
