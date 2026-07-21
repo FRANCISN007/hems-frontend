@@ -6,12 +6,16 @@ const API_BASE_URL =
   `http://${window.location.hostname}:8000`;
 
 const ListPayment = () => {
+
+  const today = new Date().toISOString().split("T")[0];
   const [payments, setPayments] = useState([]);
   const [banks, setBanks] = useState([]);
-  const [status, setStatus] = useState("none");
+
   const [debtorName, setDebtorName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+
+  const [status, setStatus] = useState("All");
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [noDataMessage, setNoDataMessage] = useState("");
@@ -73,6 +77,10 @@ const ListPayment = () => {
       fetchByStatus();
     }
   }, [bankFilter]);
+
+  useEffect(() => {
+    fetchByStatus();
+  }, []);
 
   
   // Helper to normalize bank field
