@@ -10,6 +10,8 @@ const IssueItems = () => {
   const [issueDate, setIssueDate] = useState("");
   const [message, setMessage] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [rows, setRows] = useState([
     { itemId: "", itemName: "", search: "", suggestions: [], quantity: "" },
   ]);
@@ -142,7 +144,15 @@ const IssueItems = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!issuedTo) return alert("Select a bar");
+    // Prevent double submission
+    if (isSubmitting) return;
+
+    setMessage("");
+
+    if (!issuedTo) {
+      alert("Select a bar");
+      return;
+    }
 
     const validRows = rows.filter((r) => r.itemId && r.quantity);
 
@@ -161,18 +171,38 @@ const IssueItems = () => {
       issue_date: issueDate + "T00:00:00",
     };
 
+    // Lock submission
+    setIsSubmitting(true);
+
     try {
       await axios.post("/store/bar", payload);
 
       setMessage("✅ Items successfully issued to bar");
 
       setRows([
-        { itemId: "", itemName: "", search: "", suggestions: [], quantity: "" },
+        {
+          itemId: "",
+          itemName: "",
+          search: "",
+          suggestions: [],
+          quantity: "",
+        },
       ]);
+
       setIssuedTo("");
       setIssueDate(getToday());
+
     } catch (err) {
-      setMessage(err.response?.data?.detail || "❌ Error issuing items");
+
+      setMessage(
+        err.response?.data?.detail || "❌ Error issuing items"
+      );
+
+    } finally {
+
+      // Always unlock
+      setIsSubmitting(false);
+
     }
   };
 
@@ -249,8 +279,8 @@ const IssueItems = () => {
                 <td>
                   <input
                     type="number"
-                    min="0.1"
-                    step="0.1"
+                    min="1"
+                    step="1"
                     value={row.quantity}
                     onChange={(e) =>
                       handleRowChange(idx, "quantity", e.target.value)
@@ -274,8 +304,12 @@ const IssueItems = () => {
           ➕ Add Item
         </button>
 
-        <button type="submit" className="submit-btn">
-          📤 Issue Items
+        <button
+          type="submit"
+          className="submit-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Issuing Items..." : "📤 Issue Items"}
         </button>
       </form>
 
