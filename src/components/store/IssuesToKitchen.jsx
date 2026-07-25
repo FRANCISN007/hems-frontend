@@ -10,6 +10,8 @@ const IssueToKitchen = () => {
   const [issueDate, setIssueDate] = useState("");
   const [message, setMessage] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [rows, setRows] = useState([
     { itemId: "", itemName: "", search: "", suggestions: [], quantity: "" },
   ]);
@@ -142,36 +144,54 @@ const IssueToKitchen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!issuedTo) return alert("Select kitchen");
+    if (isSubmitting) return;
 
-    const validRows = rows.filter((r) => r.itemId && r.quantity);
-
-    if (!validRows.length) {
-      alert("Add at least one valid item");
-      return;
-    }
-
-    const payload = {
-      kitchen_id: parseInt(issuedTo),
-      issue_items: validRows.map((row) => ({
-        item_id: parseInt(row.itemId),
-        quantity: parseFloat(row.quantity),
-      })),
-      issue_date: issueDate + "T00:00:00",
-    };
+    setIsSubmitting(true);
+    setMessage("");
 
     try {
+      if (!issuedTo) {
+        alert("Select kitchen");
+        return;
+      }
+
+      const validRows = rows.filter((r) => r.itemId && r.quantity);
+
+      if (!validRows.length) {
+        alert("Add at least one valid item");
+        return;
+      }
+
+      const payload = {
+        kitchen_id: parseInt(issuedTo),
+        issue_items: validRows.map((row) => ({
+          item_id: parseInt(row.itemId),
+          quantity: parseFloat(row.quantity),
+        })),
+        issue_date: issueDate + "T00:00:00",
+      };
+
       await axios.post("/store/kitchen", payload);
 
       setMessage("✅ Items successfully issued");
 
       setRows([
-        { itemId: "", itemName: "", search: "", suggestions: [], quantity: "" },
+        {
+          itemId: "",
+          itemName: "",
+          search: "",
+          suggestions: [],
+          quantity: "",
+        },
       ]);
+
       setIssuedTo("");
       setIssueDate(getToday());
+
     } catch (err) {
       setMessage(err.response?.data?.detail || "❌ Error issuing items");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -269,12 +289,21 @@ const IssueToKitchen = () => {
           </tbody>
         </table>
 
-        <button type="button" onClick={addRow} className="add-row-btn">
-          ➕ Add Item
-        </button>
+        <button
+            type="button"
+            onClick={addRow}
+            className="add-row-btn"
+            disabled={isSubmitting}
+          >
+            ➕ Add Item
+          </button>
 
-        <button type="submit" className="submit-btn">
-          📤 Issue Items
+        <button
+          type="submit"
+          className="submit-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Issuing..." : "📤 Issue Items"}
         </button>
       </form>
 

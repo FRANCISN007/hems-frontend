@@ -14,6 +14,7 @@ const App = () => {
     const licenseVerified = localStorage.getItem("license_verified") === "true";
     setIsLicenseVerified(licenseVerified);
   }, []);
+  
 
   return (
     <Router>
