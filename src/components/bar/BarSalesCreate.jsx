@@ -11,6 +11,8 @@ const BarSalesCreate = () => {
   ]);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -135,12 +137,28 @@ const BarSalesCreate = () => {
   // ===============================
   // Submit
   // ===============================
+  // ===============================
+// Submit
+// ===============================
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!barId) return showMessage("⚠ Please select a bar.", "warning");
 
-    const validItems = saleItems.filter((r) => r.item_id && r.quantity > 0 && r.selling_price > 0);
-    if (!validItems.length) return showMessage("⚠ Add at least one valid item.", "warning");
+    // Prevent double submission
+    if (isSubmitting) return;
+
+    if (!barId) {
+      return showMessage("⚠ Please select a bar.", "warning");
+    }
+
+    const validItems = saleItems.filter(
+      (r) => r.item_id && r.quantity > 0 && r.selling_price > 0
+    );
+
+    if (!validItems.length) {
+      return showMessage("⚠ Add at least one valid item.", "warning");
+    }
+
+    setIsSubmitting(true);
 
     try {
       const payload = {
@@ -152,16 +170,33 @@ const BarSalesCreate = () => {
           selling_price: Number(r.selling_price),
         })),
       };
+
       await axios.post("/bar/sales", payload);
+
       showMessage("✅ Sale recorded successfully!");
 
       // Reset form
       setBarId("");
       setSaleDate(new Date().toISOString().slice(0, 16));
-      setSaleItems([{ item_id: "", item_name: "", search: "", suggestions: [], quantity: 1, selling_price: 0, total: 0 }]);
+      setSaleItems([
+        {
+          item_id: "",
+          item_name: "",
+          search: "",
+          suggestions: [],
+          quantity: 1,
+          selling_price: 0,
+          total: 0,
+        },
+      ]);
     } catch (err) {
       console.error(err);
-      showMessage(err.response?.data?.detail || "❌ Failed to record sale.", "error");
+      showMessage(
+        err.response?.data?.detail || "❌ Failed to record sale.",
+        "error"
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -351,8 +386,12 @@ const BarSalesCreate = () => {
             👁 Preview / Print
           </button>
 
-          <button type="submit" className="submit-btn">
-            💾 Save Sale
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Saving..." : "💾 Save Sale"}
           </button>
         </div>
 
