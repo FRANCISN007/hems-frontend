@@ -9,6 +9,9 @@ const ListBarPayment = () => {
   const [selectedBar, setSelectedBar] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
 
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const roles = user.roles || [];
 
@@ -149,6 +152,11 @@ const ListBarPayment = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     try {
       const res = await axiosWithAuth().put(
         `/barpayment/${editingPayment.id}`,
@@ -157,13 +165,20 @@ const ListBarPayment = () => {
           amount_paid: parseFloat(formData.amount_paid),
         }
       );
+
       setPayments(
-        payments.map((p) => (p.id === editingPayment.id ? res.data : p))
+        payments.map((p) =>
+          p.id === editingPayment.id ? res.data : p
+        )
       );
+
       setEditingPayment(null);
+
     } catch (err) {
       console.error("❌ Failed to update payment:", err);
       alert("Failed to update payment.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -494,7 +509,13 @@ const ListBarPayment = () => {
               />
 
               <div className="modal-actions3">
-                <button type="submit" className="btn-edit">💾 Save</button>
+                <button
+                  type="submit"
+                  className="btn-edit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "💾 Save"}
+                </button>
                 <button type="button" onClick={() => setEditingPayment(null)} className="btn-delete">❌ Cancel</button>
               </div>
             </form>

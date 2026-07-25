@@ -18,6 +18,8 @@ const BarPayment = () => {
   const [note, setNote] = useState("");
   const [banks, setBanks] = useState([]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
@@ -99,11 +101,15 @@ const BarPayment = () => {
   const handlePayment = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+
     if (!selectedSale || !amountPaid || !paymentMethod) {
       setMessage("⚠️ Fill all required fields");
       setMessageType("warning");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       await axiosWithAuth().post("/barpayment/", {
@@ -112,7 +118,7 @@ const BarPayment = () => {
         payment_method: paymentMethod,
         bank: paymentMethod === "cash" ? null : bankId,
         note,
-        date_paid: paymentDate, // ✅ must match backend schema
+        date_paid: paymentDate,
       });
 
       setMessage("✅ Payment successful");
@@ -124,21 +130,25 @@ const BarPayment = () => {
       setPaymentMethod("");
       setBankId("");
       setNote("");
-      setPaymentDate(new Date().toISOString().split("T")[0]); // reset to today
+      setPaymentDate(new Date().toISOString().split("T")[0]);
 
-      // Refresh sales
+      // Refresh unpaid sales
       const res = await axiosWithAuth().get(
-        `/bar/unpaid_sales?bar_id=${selectedBar}` // 🔹 Updated path
+        `/bar/unpaid_sales?bar_id=${selectedBar}`
       );
+
       setSales(res.data.results || []);
       setSummary({
         total_entries: res.data.total_entries || 0,
         total_due: res.data.total_due || 0,
       });
+
     } catch (err) {
       console.error(err);
       setMessage("❌ Payment failed");
       setMessageType("error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -168,36 +178,43 @@ const BarPayment = () => {
 
       {/* SALES TABLE */}
       {loading ? (
-        <p>Loading...</p>
+  <p>Loading...</p>
       ) : (
-        <table className="sales-table2">
-          <thead>
-            <tr>
-              <th>Sale ID</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Paid</th>
-              <th>Balance</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((sale) => (
-              <tr key={sale.bar_sale_id}>
-                <td>{sale.bar_sale_id}</td>
-                <td>{formatDate(sale.sale_date)}</td> {/* 🔹 Display date */}
-                <td>{formatAmount(sale.sale_amount)}</td>
-                <td>{formatAmount(sale.amount_paid)}</td>
-                <td style={{ color: "red" }}>{formatAmount(sale.balance_due)}</td>
-                <td>{sale.status}</td>
-                <td>
-                  <button onClick={() => setSelectedSale(sale)}>Pay</button>
-                </td>
+        <div className="sales-table2-wrapper">
+          <table className="sales-table2">
+            <thead>
+              <tr>
+                <th>Sale ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {sales.map((sale) => (
+                <tr key={sale.bar_sale_id}>
+                  <td>{sale.bar_sale_id}</td>
+                  <td>{formatDate(sale.sale_date)}</td>
+                  <td>{formatAmount(sale.sale_amount)}</td>
+                  <td>{formatAmount(sale.amount_paid)}</td>
+                  <td style={{ color: "red" }}>
+                    {formatAmount(sale.balance_due)}
+                  </td>
+                  <td>{sale.status}</td>
+                  <td>
+                    <button onClick={() => setSelectedSale(sale)}>
+                      Pay
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* PAYMENT MODAL */}
@@ -263,7 +280,12 @@ const BarPayment = () => {
               />
 
               <div className="modal-actions1">
-                <button type="submit">Submit</button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Processing..." : "Submit"}
+                </button>
                 <button type="button" onClick={() => setSelectedSale(null)}>Cancel</button>
               </div>
             </form>
