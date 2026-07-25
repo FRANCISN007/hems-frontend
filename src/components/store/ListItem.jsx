@@ -9,6 +9,8 @@ const ListItem = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // =====================
   // Editing states
   // =====================
@@ -170,18 +172,35 @@ const ListItem = () => {
   // =====================
   // Update Item
   // =====================
+  // =====================
+// Update Item
+// =====================
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // Prevent double submission
+    if (isSubmitting) return;
+
     const unitPrice = parseFloat(updateUnitPrice);
     const sellingPrice = parseFloat(updateSellingPrice);
-
-    if (isNaN(unitPrice) || isNaN(sellingPrice))
-      return setMessage("❌ Unit price and Selling price must be numbers.");
-    if (!updateName.trim() || !updateUnit.trim())
-      return setMessage("❌ Name and Unit are required.");
     const parsedCategoryId = parseInt(updateCategoryId);
-    if (!parsedCategoryId || isNaN(parsedCategoryId))
-      return setMessage("❌ Please select a valid category.");
+
+    if (isNaN(unitPrice) || isNaN(sellingPrice)) {
+      setMessage("❌ Unit price and Selling price must be numbers.");
+      return;
+    }
+
+    if (!updateName.trim() || !updateUnit.trim()) {
+      setMessage("❌ Name and Unit are required.");
+      return;
+    }
+
+    if (!parsedCategoryId || isNaN(parsedCategoryId)) {
+      setMessage("❌ Please select a valid category.");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       await axiosWithAuth().put(`/store/items/${editingItem.id}`, {
@@ -192,12 +211,17 @@ const ListItem = () => {
         category_id: parsedCategoryId,
         item_type: updateItemType,
       });
+
       setMessage("✅ Item updated successfully.");
       setEditingItem(null);
-      fetchItems(searchText);
-      fetchSimpleItems(searchText);
+
+      await fetchItems(searchText);
+      await fetchSimpleItems(searchText);
+
     } catch (err) {
       setMessage(safeMessage(err, "❌ Failed to update item."));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -206,13 +230,24 @@ const ListItem = () => {
   // =====================
   const handleCreate = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting) return; // Prevent double click
+
     const unitPrice = parseFloat(newUnitPrice);
     const sellingPrice = parseFloat(newSellingPrice);
     const parsedCategoryId = parseInt(newCategoryId);
 
-    if (!newName.trim() || !newUnit.trim() || isNaN(unitPrice) || isNaN(sellingPrice) || isNaN(parsedCategoryId)) {
+    if (
+      !newName.trim() ||
+      !newUnit.trim() ||
+      isNaN(unitPrice) ||
+      isNaN(sellingPrice) ||
+      isNaN(parsedCategoryId)
+    ) {
       return setMessage("❌ All fields are required and must be valid.");
     }
+
+    setIsSubmitting(true);
 
     try {
       await axiosWithAuth().post("/store/items", {
@@ -223,17 +258,22 @@ const ListItem = () => {
         category_id: parsedCategoryId,
         item_type: newItemType || "All",
       });
+
       setMessage("✅ Item created successfully.");
+
       setNewName("");
       setNewUnit("");
       setNewUnitPrice("");
       setNewSellingPrice("");
       setNewCategoryId("");
       setNewItemType("");
+
       fetchItems(searchText);
       fetchSimpleItems(searchText);
     } catch (err) {
       setMessage(safeMessage(err, "❌ Failed to create item."));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -295,7 +335,13 @@ const ListItem = () => {
           </select>
         </label>
 
-        <button type="submit" className="save-btn">➕ Add Item</button>
+        <button
+          type="submit"
+          className="save-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "➕ Add Item"}
+        </button>
       </form>
 
       <hr />
@@ -405,7 +451,13 @@ const ListItem = () => {
               </label>
 
               <div className="modal-buttons">
-                <button type="submit" className="save-btn">💾 Save</button>
+                <button
+                  type="submit"
+                  className="save-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "💾 Save"}
+                </button>
                 <button type="button" className="cancel-btn" onClick={() => setEditingItem(null)}>❌ Cancel</button>
               </div>
             </form>
