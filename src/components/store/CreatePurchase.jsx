@@ -26,6 +26,8 @@ const CreatePurchase = () => {
   const [message, setMessage] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
 
   const searchTimers = useRef({});
@@ -183,6 +185,10 @@ const CreatePurchase = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     setMessage("");
 
     try {
@@ -233,6 +239,8 @@ const CreatePurchase = () => {
       setMessage(
         err.response?.data?.detail || "❌ Failed to save purchase."
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -382,6 +390,7 @@ const CreatePurchase = () => {
           type="button"
           className="add-row-btn"
           onClick={addRow}
+          disabled={isSubmitting}
         >
           + Add Item
         </button>
@@ -394,8 +403,12 @@ const CreatePurchase = () => {
           })}
         </div>
 
-        <button type="submit" className="submit-button">
-          Add Purchase
+        <button
+          type="submit"
+          className="submit-button"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving Purchase..." : "Add Purchase"}
         </button>
 
         {message && <p className="message">{message}</p>}
