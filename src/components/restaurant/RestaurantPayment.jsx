@@ -12,6 +12,8 @@ const RestaurantPayment = () => {
   const [banks, setBanks] = useState([]);
   const [banksLoading, setBanksLoading] = useState(true);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Check user roles
   const storedUser = JSON.parse(localStorage.getItem("user")) || {};
   let roles = Array.isArray(storedUser.roles)
@@ -112,33 +114,62 @@ const RestaurantPayment = () => {
 
   // Submit payment
   const handlePaymentSubmit = async () => {
+    // Prevent double click
+    if (isSubmitting) return;
+
     if (!paymentData.amount || parseFloat(paymentData.amount) <= 0) {
       alert("⚠️ Enter a valid amount");
       return;
     }
 
-    const finalPaymentMode = (paymentData.payment_mode || "CASH").toUpperCase();
+    const finalPaymentMode = (
+      paymentData.payment_mode || "CASH"
+    ).toUpperCase();
 
-    if ((finalPaymentMode === "POS" || finalPaymentMode === "TRANSFER") && !paymentData.bank) {
+    if (
+      (finalPaymentMode === "POS" ||
+        finalPaymentMode === "TRANSFER") &&
+      !paymentData.bank
+    ) {
       alert("⚠️ Select a bank for POS/Transfer payments");
       return;
     }
 
+    // Lock button
+    setIsSubmitting(true);
+
     try {
-      await axiosWithAuth().post(`/restpayment/sales/${currentSale.id}/payments`, {
-        amount: parseFloat(paymentData.amount),
-        payment_mode: finalPaymentMode,
-        paid_by: paymentData.paid_by,
-        bank: finalPaymentMode === "CASH" ? null : paymentData.bank,
-        payment_date: paymentData.payment_date, // backdated allowed
-      });
+      await axiosWithAuth().post(
+        `/restpayment/sales/${currentSale.id}/payments`,
+        {
+          amount: parseFloat(paymentData.amount),
+          payment_mode: finalPaymentMode,
+          paid_by: paymentData.paid_by,
+          bank:
+            finalPaymentMode === "CASH"
+              ? null
+              : paymentData.bank,
+          payment_date: paymentData.payment_date,
+        }
+      );
 
       alert("✅ Payment recorded successfully!");
-      fetchSales(selectedLocation); // refresh sales & balances
+
+      await fetchSales(selectedLocation);
+
       closePaymentModal();
     } catch (err) {
-      console.error("Payment failed:", err.response?.data || err);
-      alert(`❌ Payment failed: ${err.response?.data?.detail || "Please try again."}`);
+      console.error(err);
+
+      alert(
+        `❌ Payment failed: ${
+          err.response?.data?.detail ||
+          "Please try again."
+        }`
+      );
+    } finally {
+      // Always unlock button
+      setIsSubmitting(false);
     }
   };
 
@@ -340,13 +371,15 @@ const RestaurantPayment = () => {
                 className="btn btn-primary"
                 onClick={handlePaymentSubmit}
                 disabled={
+                  isSubmitting ||
                   !paymentData.amount ||
                   parseFloat(paymentData.amount) <= 0 ||
-                  ((paymentData.payment_mode === "POS" || paymentData.payment_mode === "TRANSFER") &&
+                  ((paymentData.payment_mode === "POS" ||
+                    paymentData.payment_mode === "TRANSFER") &&
                     !paymentData.bank)
                 }
               >
-                ✅ Submit
+                {isSubmitting ? "Saving..." : "✅ Submit"}
               </button>
               <button className="btn btn-secondary" onClick={closePaymentModal}>
                 ❌ Cancel
