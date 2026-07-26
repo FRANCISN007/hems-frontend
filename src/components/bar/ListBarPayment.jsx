@@ -10,6 +10,11 @@ const ListBarPayment = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
 
+  const [editPaymentMethod, setEditPaymentMethod] = useState("");
+  const [editBank, setEditBank] = useState("");
+  
+
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -35,6 +40,7 @@ const ListBarPayment = () => {
   const [formData, setFormData] = useState({
     amount_paid: "",
     payment_method: "",
+    bank: "",
     note: "",
     date_paid: today,
   });
@@ -101,7 +107,7 @@ const ListBarPayment = () => {
           cumulative_paid: p.cumulative_paid,
           balance_due: p.balance_due,
           payment_method: p.payment_method,
-          bank: p.bank || "-",
+          bank: p.bank || "",
           note: p.note,
           date_paid: p.date_paid,
           created_by: p.created_by,
@@ -140,10 +146,13 @@ const ListBarPayment = () => {
 
   const handleEdit = (payment) => {
     setEditingPayment(payment);
+
+    setEditPaymentMethod(payment.payment_method || "");
+    setEditBank(payment.bank || "");
+
     setFormData({
       amount_paid: payment.amount_paid,
-      payment_method: payment.payment_method,
-      note: payment.note,
+      note: payment.note || "",
       date_paid: payment.date_paid
         ? new Date(payment.date_paid).toISOString().split("T")[0]
         : today,
@@ -163,6 +172,8 @@ const ListBarPayment = () => {
         {
           ...formData,
           amount_paid: parseFloat(formData.amount_paid),
+          payment_method: editPaymentMethod,
+          bank: editPaymentMethod === "cash" ? null : editBank,
         }
       );
 
@@ -492,8 +503,14 @@ const ListBarPayment = () => {
 
               <label>Payment Method</label>
               <select
-                value={formData.payment_method || ""}
-                onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                value={editPaymentMethod}
+                onChange={(e) => {
+                  setEditPaymentMethod(e.target.value);
+
+                  if (e.target.value === "cash") {
+                    setEditBank("");
+                  }
+                }}
               >
                 <option value="">-- Select Method --</option>
                 <option value="cash">Cash</option>
@@ -501,11 +518,31 @@ const ListBarPayment = () => {
                 <option value="transfer">Transfer</option>
               </select>
 
+              <label>Bank</label>
+              <select
+                value={editBank}
+                onChange={(e) => setEditBank(e.target.value)}
+                disabled={editPaymentMethod === "cash"}
+              >
+                <option value="">-- Select Bank --</option>
+
+                {banks.map((b) => (
+                  <option key={b.id} value={b.name}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+
               <label>Note</label>
               <input
                 type="text"
                 value={formData.note}
-                onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    note: e.target.value,
+                  })
+                }
               />
 
               <div className="modal-actions3">
