@@ -13,6 +13,8 @@ const GuestOrderCreate = () => {
   const [kitchens, setKitchens] = useState([]);
   const [message, setMessage] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const axios = axiosWithAuth();
 
   // =========================
@@ -264,77 +266,57 @@ const GuestOrderCreate = () => {
   const submitOrder = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+
+    // Validation first
     if (!order.location_id) {
-      return setMessage(
-        "❌ Please select a location."
-      );
+      setMessage("❌ Please select a location.");
+      return;
     }
 
     if (!order.kitchen_id) {
-      return setMessage(
-        "❌ Please select a kitchen."
-      );
+      setMessage("❌ Please select a kitchen.");
+      return;
     }
 
     if (
       order.order_type === "room_service" &&
       !order.room_number
     ) {
-      return setMessage(
-        "❌ Room Service requires a room number."
-      );
+      setMessage("❌ Room Service requires a room number.");
+      return;
     }
 
     if (!order.sales_date) {
-      return setMessage(
-        "❌ Please select order date."
-      );
+      setMessage("❌ Please select order date.");
+      return;
     }
 
     if (order.items.length === 0) {
-      return setMessage(
-        "❌ Please add at least one item."
-      );
+      setMessage("❌ Please add at least one item.");
+      return;
     }
 
-    // =========================
-    // 🔥 PAYLOAD
-    // =========================
+    // Lock button only AFTER validation passes
+    setIsSubmitting(true);
+
     const payload = {
       ...order,
-
       location_id: Number(order.location_id),
-
       kitchen_id: Number(order.kitchen_id),
-
-      // ✅ IMPORTANT
       sales_date: order.sales_date,
-
       items: order.items.map((i) => ({
-        store_item_id: Number(
-          i.store_item_id
-        ),
-
+        store_item_id: Number(i.store_item_id),
         quantity: Number(i.quantity),
-
-        price_per_unit:
-          Number(i.price_per_unit) || 0,
+        price_per_unit: Number(i.price_per_unit) || 0,
       })),
     };
 
     try {
-      await axios.post(
-        "/restaurant/meal-orders",
-        payload
-      );
+      await axios.post("/restaurant/meal-orders", payload);
 
-      setMessage(
-        "✅ Guest order created successfully!"
-      );
+      setMessage("✅ Guest order created successfully!");
 
-      // =========================
-      // RESET
-      // =========================
       setOrder({
         location_id: "",
         kitchen_id: "",
@@ -342,13 +324,7 @@ const GuestOrderCreate = () => {
         room_number: "",
         guest_name: "",
         status: "open",
-
-        // ✅ RESET DATE
-        sales_date:
-          new Date()
-            .toISOString()
-            .split("T")[0],
-
+        sales_date: new Date().toISOString().split("T")[0],
         items: [],
       });
 
@@ -360,11 +336,15 @@ const GuestOrderCreate = () => {
         suggestions: [],
         selectedItem: null,
       });
+
     } catch (err) {
       setMessage(
         err?.response?.data?.detail ||
-          "❌ Failed to create order."
+        "❌ Failed to create order."
       );
+    } finally {
+      // ALWAYS unlock the button
+      setIsSubmitting(false);
     }
   };
 
@@ -657,9 +637,12 @@ const GuestOrderCreate = () => {
 
         {/* SUBMIT */}
         <div className="submit-container">
-          <button type="submit" className="submit-btn">
-            🧾 Create Guest Order
-          </button>
+          <button
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Submit Order"}
+        </button>
         </div>
       </form>
     </div>
