@@ -251,91 +251,88 @@ const OrderToSales = () => {
         </p>
       ) : (
         <>
-          {/* TOTALS */}
-          <div className="totals">
-            <span>
-              Orders: {totals.total_entries}
-            </span>
+          <div className="orders-container">
+        {/* TOTALS */}
+        <div className="totals">
+          <span>
+            Orders: {totals.total_entries}
+          </span>
 
-            <span>
-              Total: {formatCurrency(totals.total_amount)}
-            </span>
-          </div>
+          <span>
+            Total: {formatCurrency(totals.total_amount)}
+          </span>
+        </div>
 
-          {/* ORDERS */}
-          <ul className="orders-list">
-            {orders.map((order) => {
-              const orderTotal =
-                calculateOrderTotal(order);
+        {/* ORDERS */}
+        <ul className="orders-list">
+          {orders.map((order) => {
+            const orderTotal = calculateOrderTotal(order);
 
-              const isHighValue =
-                orderTotal >= HIGH_VALUE_LIMIT;
+            const isHighValue =
+              orderTotal >= HIGH_VALUE_LIMIT;
 
-              return (
-                <li
-                  key={order.id}
-                  className={`order-card ${
-                    isHighValue ? "high-value" : ""
-                  }`}
-                >
-                  {/* HEADER */}
-                  <div className="order-header">
-                    <strong>
-                      Order #{order.id} –{" "}
-                      {order.order_type?.toLowerCase()}
-                    </strong>
+            return (
+              <li
+                key={order.id}
+                className={`order-card ${
+                  isHighValue ? "high-value" : ""
+                }`}
+              >
+                {/* HEADER */}
+                <div className="order-header">
+                  <strong>
+                    Order #{order.id} –{" "}
+                    {order.order_type?.toLowerCase()}
+                  </strong>
 
-                    {isHighValue && (
-                      <span className="badge">
-                        🔥 High Value
-                      </span>
-                    )}
-                  </div>
-
-                  {/* ITEMS */}
-                  <div className="order-items">
-                    {order.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="order-item"
-                      >
-                        <span>
-                          {item.item_name} ×{" "}
-                          {item.quantity}
-                        </span>
-
-                        <span>
-                          {formatCurrency(
-                            item.total_price
-                          )}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* FOOTER */}
-                  <div className="order-footer">
-                    <button
-                      className="create-sale-btn"
-                      disabled={
-                        !servedBy.trim() || !salesDate
-                      }
-                      onClick={() =>
-                        handleCreateSale(order)
-                      }
-                    >
-                      ➕ Create Sale
-                    </button>
-
-                    <span className="order-total">
-                      Total:{" "}
-                      {formatCurrency(orderTotal)}
+                  {isHighValue && (
+                    <span className="badge">
+                      🔥 High Value
                     </span>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                  )}
+                </div>
+
+                {/* ITEMS */}
+                <div className="order-items">
+                  {order.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="order-item"
+                    >
+                      <span>
+                        {item.item_name} × {item.quantity}
+                      </span>
+
+                      <span>
+                        {formatCurrency(item.total_price)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* FOOTER */}
+                <div className="order-footer">
+                  <button
+                    className="create-sale-btn"
+                    disabled={
+                      !servedBy.trim() || !salesDate
+                    }
+                    onClick={() =>
+                      handleCreateSale(order)
+                    }
+                  >
+                    ➕ Create Sale
+                  </button>
+
+                  <span className="order-total">
+                    Total: {formatCurrency(orderTotal)}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
         </>
       )}
     </div>
