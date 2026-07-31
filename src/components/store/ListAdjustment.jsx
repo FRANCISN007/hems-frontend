@@ -177,31 +177,37 @@ const ListAdjustment = () => {
         </button>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Reason</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {adjustments.map((adj, index) => (
-            <tr key={adj.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
-              <td>{new Date(adj.adjusted_at).toLocaleString()}</td>
-              <td>{adj.item?.name}</td>
-              <td>{adj.quantity_adjusted}</td>
-              <td>{adj.reason}</td>
-              <td>
-                <button onClick={() => handleEditClick(adj)}>✏ Edit</button>
-                <button onClick={() => handleDelete(adj.id)}>🗑 Delete</button>
-              </td>
+      <div className="adjustment-table-wrapper">
+        <table className="adjustment-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Reason</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {adjustments.map((adj, index) => (
+              <tr
+                key={adj.id}
+                className={index % 2 === 0 ? "even-row" : "odd-row"}
+              >
+                <td>{new Date(adj.adjusted_at).toLocaleString()}</td>
+                <td>{adj.item?.name}</td>
+                <td>{adj.quantity_adjusted}</td>
+                <td>{adj.reason}</td>
+                <td>
+                  <button onClick={() => handleEditClick(adj)}>✏ Edit</button>
+                  <button onClick={() => handleDelete(adj.id)}>🗑 Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Edit Form Modal */}
       {editingAdjustment && (

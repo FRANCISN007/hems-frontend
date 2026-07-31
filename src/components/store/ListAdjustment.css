@@ -251,3 +251,26 @@
 .filter-section button:hover {
   background: #3b94d9;
 }
+
+
+
+.adjustment-table-wrapper {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #bdbdbd;
+}
+
+.adjustment-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.adjustment-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #293552;
+    color: #fff;
+}
