@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosWithAuth from "../../utils/axiosWithAuth";
-import "./ListAdjustment.css";
+import "./KitchenAdjustmentList.css";
 
 const KitchenAdjustmentList = () => {
   const [adjustments, setAdjustments] = useState([]);
@@ -192,7 +192,9 @@ const KitchenAdjustmentList = () => {
       </div>
 
       {/* Table */}
-      <table className="adjustment-table">
+      {/* Table */}
+      <div className="adjustment-table-wrapper">
+        <table className="adjustment-table">
 
         <thead>
           <tr>
@@ -224,6 +226,7 @@ const KitchenAdjustmentList = () => {
           ))}
         </tbody>
       </table>
+    </div>
 
       {/* Edit Modal */}
       {editingAdjustment && (
@@ -272,5 +275,6 @@ const KitchenAdjustmentList = () => {
     </div>
   );
 };
+
 
 export default KitchenAdjustmentList;

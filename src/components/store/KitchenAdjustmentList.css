@@ -347,3 +347,52 @@
 .adjustment-table button:last-child:hover {
   background-color: #c0392b;
 }
+
+
+
+/* Scrollable table */
+.adjustment-table-wrapper {
+    display: block;
+    width: 100%;
+    height: 400px;
+    overflow-y: scroll !important;
+    overflow-x: auto;
+    border: 3px solid rgb(26, 24, 24);
+    background: yellow;
+}
+
+.adjustment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.adjustment-table thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.adjustment-table thead th {
+    background: #293552;
+    color: #fff;
+}
+
+
+/* Optional scrollbar styling */
+.adjustment-table-wrapper::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.adjustment-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.adjustment-table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.adjustment-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
