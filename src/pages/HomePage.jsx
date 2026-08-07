@@ -54,8 +54,8 @@ const HomePage = () => {
 
         {/* ✅ MOVE THIS OUT */}
         <div className="hems-text">
-          <span className="hems-letter">H</span>
-          <span className="hems-letter">E</span>
+          <span className="hems-letter">D</span>
+          <span className="hems-letter">I</span>
           <span className="hems-letter">M</span>
           <span className="hems-letter">S</span>
         </div>
@@ -69,15 +69,15 @@ const HomePage = () => {
         <div className="home-card">
           <div className="welcome-text">
 
-            <h1 className="main-title">Welcome to HEMS</h1>
+            <h1 className="main-title">Welcome to DIMS</h1>
 
             <h2 className="main-heading">
-              Smart Hotel & Event Management Platform
+              Smart Distribution & Inventory Management Platform
             </h2>
 
             <p>
               <br />
-              Streamline bookings, bar, restaurant, store, and event operations—while enhancing the guest experience.
+              A complete Distribution & Inventory Management System for managing procurement, warehouses, inventory distribution, multiple locations, and operational consumption.
             </p>
 
           </div>
