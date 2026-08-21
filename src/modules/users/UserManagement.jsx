@@ -6,6 +6,7 @@ import getBaseUrl from "../../api/config";
 
 const API_BASE_URL = getBaseUrl();
 
+//const baseRoleOptions = ["user", "admin", "manager"];
 const baseRoleOptions = ["user", "admin", "dashboard", "bar", "restaurant", "store", "event"];
 const superAdminRole = "super_admin";
 
@@ -137,7 +138,7 @@ const UserManagement = () => {
 
   const showPopup = (msg) => {
     setPopupMsg(msg);
-    setTimeout(() => setPopupMsg(""), 3000);
+    setTimeout(() => setPopupMsg(""), 4000);
   };
 
   // User functions (identical pattern to Shopman)
@@ -303,7 +304,7 @@ const UserManagement = () => {
       setNewBusinessId("");
       fetchUsers();
     } catch (err) {
-      showPopup("Failed to create user");
+      showPopup(err.message || "Failed to create user");
     }
   };
 
